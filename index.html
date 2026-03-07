@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" onload="onGsiLibraryLoaded()" async defer></script>
   <style>
     :root {
       --bg:           #f5f2ec;
@@ -37,6 +39,77 @@
         linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
       background-size: 24px 24px;
       min-height: 100vh;
+    }
+
+    /* ── Login screen ────────────────────────────────────── */
+    #login-screen {
+      position: fixed;
+      inset: 0;
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 24px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+    }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 44px 40px;
+      width: min(380px, calc(100vw - 40px));
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.09);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .login-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .login-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .login-sub {
+      font-size: 13.5px;
+      color: var(--ink-dim);
+      line-height: 1.5;
+      max-width: 260px;
+    }
+
+    .login-rule {
+      width: 36px;
+      height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+    }
+
+    #gsi-button {
+      margin-top: 4px;
+      /* Google's button has its own sizing */
+    }
+
+    .login-note {
+      font-size: 11px;
+      color: var(--ink-dim);
+      line-height: 1.6;
+      max-width: 280px;
     }
 
     /* ── Header ─────────────────────────────────────────── */
@@ -114,7 +187,35 @@
     .header-actions {
       margin-left: auto;
       display: flex;
+      align-items: center;
       gap: 8px;
+    }
+
+    /* User badge */
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 3px 10px 3px 4px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .user-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      display: block;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      white-space: nowrap;
     }
 
     .btn {
@@ -140,6 +241,13 @@
       border-color: var(--accent);
     }
     .btn-primary:hover { opacity: 0.88; border-color: var(--accent); box-shadow: none; }
+    .btn-ghost {
+      border-color: transparent;
+      background: none;
+      color: var(--ink-dim);
+      padding: 6px 10px;
+    }
+    .btn-ghost:hover { background: var(--accent-light); border-color: transparent; box-shadow: none; color: var(--ink); }
 
     /* ── Layout ─────────────────────────────────────────── */
     .app-layout {
@@ -471,77 +579,90 @@
 </head>
 <body>
 
-<!-- ── Header ──────────────────────────────────────────── -->
-<header>
-  <span class="header-logo">NZRAB&#8202;·&#8202;NPE</span>
-  <div class="header-sep"></div>
-  <div class="tabs" id="tabs">
-    <button class="tab active" data-c="amelia" onclick="switchCandidate('amelia')">
-      Amelia <span class="tab-badge" id="badge-amelia">0%</span>
-    </button>
-    <button class="tab" data-c="matamoana" onclick="switchCandidate('matamoana')">
-      Matamoana <span class="tab-badge" id="badge-matamoana">0%</span>
-    </button>
+<!-- ── Login screen ─────────────────────────────────────── -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">NZRAB&#8202;·&#8202;NPE</div>
+    <div class="login-title">Module Tracker</div>
+    <div class="login-sub">Sign in to access your study progress for the Named Pathway Exam.</div>
+    <div class="login-rule"></div>
+    <div id="gsi-button"></div>
+    <div class="login-note">Access is restricted to authorised accounts.<br>Progress is stored in your browser.</div>
   </div>
-  <div class="header-actions">
-    <button class="btn" onclick="generateSummary()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <polyline points="14,2 14,8 20,8"/>
-        <line x1="16" y1="13" x2="8" y2="13"/>
-        <line x1="16" y1="17" x2="8" y2="17"/>
-      </svg>
-      Weekly Summary
-    </button>
-    <button class="btn btn-primary" onclick="saveState(); showToast('Progress saved')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-        <polyline points="17,21 17,13 7,13 7,21"/>
-        <polyline points="7,3 7,8 15,8"/>
-      </svg>
-      Save
-    </button>
-  </div>
-</header>
-
-<!-- ── App body ─────────────────────────────────────────── -->
-<div class="app-layout">
-
-  <!-- Sidebar -->
-  <aside>
-
-    <!-- Overall progress -->
-    <div class="s-card">
-      <div class="s-label">Overall Progress</div>
-      <div class="pct-big" id="pct-big">0%</div>
-      <div class="pct-sub" id="pct-sub">0 of 43 modules complete</div>
-      <div class="bar-wrap">
-        <div class="bar-fill" id="bar-overall" style="width:0%"></div>
-      </div>
-    </div>
-
-    <!-- Competency coverage -->
-    <div class="s-card">
-      <div class="s-label">Competency Coverage</div>
-      <div class="comp-list" id="comp-list"><!-- injected --></div>
-    </div>
-
-    <!-- Readiness -->
-    <div class="s-card">
-      <div class="s-label">Readiness</div>
-      <div class="readiness-label" id="readiness-label">Not Started</div>
-      <div class="readiness-desc" id="readiness-desc">Begin with any category to build momentum.</div>
-    </div>
-
-  </aside>
-
-  <!-- Main content -->
-  <main>
-    <div class="filters" id="filters"><!-- injected --></div>
-    <div id="module-list"><!-- injected --></div>
-  </main>
-
 </div>
+
+<!-- ── App (hidden until authenticated) ─────────────────── -->
+<div id="app" style="display:none">
+
+  <!-- Header -->
+  <header>
+    <span class="header-logo">NZRAB&#8202;·&#8202;NPE</span>
+    <div class="header-sep"></div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-c="amelia" onclick="switchCandidate('amelia')">
+        Amelia <span class="tab-badge" id="badge-amelia">0%</span>
+      </button>
+      <button class="tab" data-c="matamoana" onclick="switchCandidate('matamoana')">
+        Matamoana <span class="tab-badge" id="badge-matamoana">0%</span>
+      </button>
+    </div>
+    <div class="header-actions">
+      <div id="user-badge"></div>
+      <div class="header-sep"></div>
+      <button class="btn" onclick="generateSummary()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        Weekly Summary
+      </button>
+      <button class="btn btn-primary" onclick="saveState(); showToast('Progress saved')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17,21 17,13 7,13 7,21"/>
+          <polyline points="7,3 7,8 15,8"/>
+        </svg>
+        Save
+      </button>
+    </div>
+  </header>
+
+  <!-- App body -->
+  <div class="app-layout">
+
+    <!-- Sidebar -->
+    <aside>
+      <div class="s-card">
+        <div class="s-label">Overall Progress</div>
+        <div class="pct-big" id="pct-big">0%</div>
+        <div class="pct-sub" id="pct-sub">0 of 43 modules complete</div>
+        <div class="bar-wrap">
+          <div class="bar-fill" id="bar-overall" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="s-card">
+        <div class="s-label">Competency Coverage</div>
+        <div class="comp-list" id="comp-list"></div>
+      </div>
+
+      <div class="s-card">
+        <div class="s-label">Readiness</div>
+        <div class="readiness-label" id="readiness-label">Not Started</div>
+        <div class="readiness-desc"  id="readiness-desc">Begin with any category to build momentum.</div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main>
+      <div class="filters"     id="filters"></div>
+      <div id="module-list"></div>
+    </main>
+
+  </div><!-- /app-layout -->
+</div><!-- /app -->
 
 <!-- ── Weekly Summary Modal ─────────────────────────────── -->
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
@@ -573,7 +694,132 @@
 <script>
 'use strict';
 
-// ── Data ──────────────────────────────────────────────────
+// ── Config ─────────────────────────────────────────────────
+//
+// 1. Replace GOOGLE_CLIENT_ID with your OAuth 2.0 Client ID from:
+//    https://console.cloud.google.com/
+//    APIs & Services → Credentials → Create Credentials → OAuth 2.0 Client ID
+//    Application type: Web application
+//    Authorised JavaScript origin: https://nuku-studio.github.io
+//
+// 2. Optionally map each person's Gmail address to their candidate tab.
+//    If an email matches, the tab auto-switches on login.
+//    Leave commented out to keep manual tab switching.
+
+const GOOGLE_CLIENT_ID = 'REPLACE_WITH_YOUR_CLIENT_ID';
+
+const CANDIDATE_EMAILS = {
+  // 'amelia@gmail.com':    'amelia',
+  // 'matamoana@gmail.com': 'matamoana',
+};
+
+// ── Auth ───────────────────────────────────────────────────
+
+const AUTH_KEY = 'nzrab-auth-v1';
+
+function getAuth() {
+  try { return JSON.parse(localStorage.getItem(AUTH_KEY)); }
+  catch { return null; }
+}
+
+function setAuth(payload) {
+  localStorage.setItem(AUTH_KEY, JSON.stringify({
+    name:    payload.name,
+    email:   payload.email,
+    picture: payload.picture,
+    sub:     payload.sub,
+  }));
+}
+
+function clearAuth() {
+  localStorage.removeItem(AUTH_KEY);
+}
+
+// Decode the JWT credential returned by Google (no verification needed
+// client-side — we just want the display fields).
+function parseJwt(token) {
+  const b64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+  return JSON.parse(atob(b64));
+}
+
+// Called by Google's GSI library after sign-in
+function onGoogleSignIn(response) {
+  const payload = parseJwt(response.credential);
+  setAuth(payload);
+  showApp(payload);
+}
+
+function showApp(auth) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  renderUserBadge(auth);
+
+  // Auto-switch to the mapped candidate tab (if configured)
+  const mapped = CANDIDATE_EMAILS[auth.email];
+  if (mapped) activeCandidate = mapped;
+
+  renderAll();
+}
+
+function renderUserBadge(auth) {
+  const firstName = (auth.name || auth.email).split(' ')[0];
+  document.getElementById('user-badge').innerHTML = `
+    <div class="user-pill">
+      <img class="user-avatar" src="${auth.picture || ''}"
+           alt="${firstName}"
+           onerror="this.style.display='none'">
+      <span class="user-name">${firstName}</span>
+    </div>
+    <button class="btn btn-ghost" onclick="signOut()" title="Sign out">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16,17 21,12 16,7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      Sign out
+    </button>
+  `;
+}
+
+function signOut() {
+  const auth = getAuth();
+  if (auth?.email && typeof google !== 'undefined') {
+    google.accounts.id.revoke(auth.email, () => {});
+    google.accounts.id.disableAutoSelect();
+  }
+  clearAuth();
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  initGoogleSignIn();
+}
+
+// ── GSI library init ───────────────────────────────────────
+
+let _gsiReady = false;
+
+function initGoogleSignIn() {
+  if (typeof google === 'undefined' || !google.accounts) {
+    _gsiReady = true; // library not loaded yet; onGsiLibraryLoaded() will call us
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback:  onGoogleSignIn,
+    ux_mode:   'popup',
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('gsi-button'),
+    { theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular', width: 280 }
+  );
+  google.accounts.id.prompt(); // show One Tap if available
+}
+
+// Called by the GSI <script> onload
+function onGsiLibraryLoaded() {
+  if (_gsiReady) initGoogleSignIn();
+}
+
+// ── Data ───────────────────────────────────────────────────
 
 const CATEGORIES = [
   { id: 'admin',    label: 'Administration',       code: '01', colour: '#6366f1', competency: 'Practice Context'        },
@@ -593,7 +839,6 @@ const COMPETENCIES = [
   { id: 'Contract Administration', colour: '#ef4444' },
 ];
 
-// 43 curated modules: 6 + 4 + 6 + 7 + 10 + 7 + 3
 const MODULES = [
   // ── 01 Administration (6) ────────────────────────────────
   { id: 'pn_1.101',  pn: 'pn_1.101',  name: 'Commission Where Prior Architect Involved',             categoryId: 'admin',    dur: 5  },
@@ -655,9 +900,9 @@ const READINESS = [
   [90, 'Exam Ready',         'Outstanding coverage. Do a final review pass.'],
 ];
 
-const TOTAL = MODULES.length; // 43
+const TOTAL = MODULES.length;
 
-// ── State ──────────────────────────────────────────────────
+// ── Tracker state ──────────────────────────────────────────
 
 const LS_KEY = 'nzrab-tracker-v1';
 let activeCandidate = 'amelia';
@@ -688,7 +933,6 @@ function saveState() {
 
 // ── Derived helpers ────────────────────────────────────────
 
-function completed() { return state[activeCandidate].completed; }
 function pct(c) { return Math.round((state[c].completed.size / TOTAL) * 100); }
 
 function competencyStats(c) {
@@ -708,8 +952,7 @@ function readinessFor(p) {
 }
 
 function weakest(c) {
-  const stats = competencyStats(c);
-  return stats.reduce((a, b) => b.p < a.p ? b : a);
+  return competencyStats(c).reduce((a, b) => b.p < a.p ? b : a);
 }
 
 function nextModules(c, n = 5) {
@@ -737,11 +980,10 @@ function renderTabs() {
 function renderSidebar() {
   const p = pct(activeCandidate);
   const n = state[activeCandidate].completed.size;
-  document.getElementById('pct-big').textContent      = p + '%';
-  document.getElementById('pct-sub').textContent      = `${n} of ${TOTAL} modules complete`;
-  document.getElementById('bar-overall').style.width  = p + '%';
+  document.getElementById('pct-big').textContent     = p + '%';
+  document.getElementById('pct-sub').textContent     = `${n} of ${TOTAL} modules complete`;
+  document.getElementById('bar-overall').style.width = p + '%';
 
-  // Competency bars
   const stats = competencyStats(activeCandidate);
   document.getElementById('comp-list').innerHTML = stats.map(s => `
     <div class="comp-item">
@@ -755,20 +997,19 @@ function renderSidebar() {
     </div>
   `).join('');
 
-  // Readiness
   const [, label, desc] = readinessFor(p);
   document.getElementById('readiness-label').textContent = label;
   document.getElementById('readiness-desc').textContent  = desc;
 }
 
 function renderFilters() {
-  const done = state[activeCandidate].completed;
+  const done    = state[activeCandidate].completed;
   const pending = TOTAL - done.size;
 
   const chips = [
-    { id: 'all',       label: 'All',       count: TOTAL,       colour: null },
-    { id: 'pending',   label: 'Pending',   count: pending,     colour: null },
-    { id: 'completed', label: 'Completed', count: done.size,   colour: null },
+    { id: 'all',       label: 'All',       count: TOTAL,     colour: null },
+    { id: 'pending',   label: 'Pending',   count: pending,   colour: null },
+    { id: 'completed', label: 'Completed', count: done.size, colour: null },
     ...CATEGORIES.map(c => ({
       id: c.id, label: c.label,
       count: MODULES.filter(m => m.categoryId === c.id).length,
@@ -800,7 +1041,6 @@ function renderModuleList() {
     return;
   }
 
-  // Group by category in original order
   const groups = new Map();
   for (const cat of CATEGORIES) groups.set(cat.id, []);
   for (const m of filtered) groups.get(m.categoryId).push(m);
@@ -814,9 +1054,8 @@ function renderModuleList() {
 
       const cards = mods.map(m => {
         const isDone = done.has(m.id);
-        const delay  = `${i++ * 28}ms`;
         return `<div class="module-card${isDone ? ' done' : ''}"
-                     style="--delay:${delay}"
+                     style="--delay:${i++ * 28}ms"
                      onclick="toggleModule('${m.id}')"
                      title="${m.name}">
           <div class="check-ring">
@@ -852,28 +1091,16 @@ function renderModuleList() {
 
 // ── Actions ────────────────────────────────────────────────
 
-function switchCandidate(c) {
-  activeCandidate = c;
-  renderAll();
-}
-
-function setFilter(f) {
-  activeFilter = f;
-  renderFilters();
-  renderModuleList();
-}
+function switchCandidate(c) { activeCandidate = c; renderAll(); }
+function setFilter(f) { activeFilter = f; renderFilters(); renderModuleList(); }
 
 function toggleModule(id) {
   const set = state[activeCandidate].completed;
   if (set.has(id)) { set.delete(id); } else { set.add(id); }
   saveState();
-  renderTabs();
-  renderSidebar();
-  renderFilters();
-  renderModuleList();
-  const m   = MODULES.find(m => m.id === id);
-  const msg = set.has(id) ? `Marked complete: ${m.name}` : `Unmarked: ${m.name}`;
-  showToast(msg);
+  renderTabs(); renderSidebar(); renderFilters(); renderModuleList();
+  const m = MODULES.find(m => m.id === id);
+  showToast(set.has(id) ? `Marked complete: ${m.name}` : `Unmarked: ${m.name}`);
 }
 
 // ── Toast ──────────────────────────────────────────────────
@@ -898,23 +1125,16 @@ function generateSummary() {
   const next5 = nextModules(activeCandidate, 5);
   const date  = new Date().toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric' });
 
-  function bar(pct) {
-    const f = Math.round(pct / 10);
-    return '\u2588'.repeat(f) + '\u2591'.repeat(10 - f);
-  }
+  function bar(p) { const f = Math.round(p / 10); return '\u2588'.repeat(f) + '\u2591'.repeat(10 - f); }
   function rpad(s, n) { return s + ' '.repeat(Math.max(0, n - s.length)); }
 
-  const compLines = stats
-    .map(s => `  ${rpad(s.id, 26)} ${bar(s.p)} ${String(s.p).padStart(3)}%`)
-    .join('\n');
-
+  const compLines = stats.map(s => `  ${rpad(s.id, 26)} ${bar(s.p)} ${String(s.p).padStart(3)}%`).join('\n');
   const nextLines = next5.length
-    ? next5.map((m, i) => `  ${i + 1}. ${m.pn} — ${m.name}`).join('\n')
+    ? next5.map((m, i) => `  ${i + 1}. ${m.pn} \u2014 ${m.name}`).join('\n')
     : '  (All modules complete!)';
-
   const startWith = next5.length ? next5[0].name : 'a final review of key topics';
 
-  const text =
+  document.getElementById('summary-pre').textContent =
 `NZRAB NPE \u2014 Weekly Summary
 Candidate: ${name} | Date: ${date}
 
@@ -931,22 +1151,16 @@ ${nextLines}
 ---
 [STUDY] You are a study coach for the NZRAB NPE exam. I will give you practice note topics and you will quiz me, explain concepts, and help me identify gaps. Start with: ${startWith}`;
 
-  document.getElementById('summary-pre').textContent = text;
   document.getElementById('overlay').classList.add('open');
 }
 
-function closeModal() {
-  document.getElementById('overlay').classList.remove('open');
-}
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
 
 async function copyToClipboard() {
-  const text = document.getElementById('summary-pre').textContent;
   try {
-    await navigator.clipboard.writeText(text);
+    await navigator.clipboard.writeText(document.getElementById('summary-pre').textContent);
     showToast('Copied to clipboard');
-  } catch {
-    showToast('Copy failed — select all text and copy manually');
-  }
+  } catch { showToast('Copy failed — select all text and copy manually'); }
 }
 
 // ── Auto-save ──────────────────────────────────────────────
@@ -955,7 +1169,12 @@ setInterval(saveState, 60_000);
 
 // ── Init ───────────────────────────────────────────────────
 
-renderAll();
+const _existingAuth = getAuth();
+if (_existingAuth) {
+  showApp(_existingAuth);  // already signed in — skip login screen
+} else {
+  initGoogleSignIn();      // show login screen, wire up GSI button
+}
 </script>
 </body>
 </html>
