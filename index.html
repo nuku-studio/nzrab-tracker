@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" onload="onGsiLibraryLoaded()" async defer></script>
   <style>
     :root {
@@ -26,6 +25,7 @@
       --sidebar-w:    280px;
       --radius:       8px;
       --header-h:     56px;
+      --player-h:     64px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,21 +41,17 @@
       min-height: 100vh;
     }
 
-    /* ── Login screen ────────────────────────────────────── */
+    /* ── Login screen ──────────────────────────────────────── */
     #login-screen {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background-color: var(--bg);
       background-image:
         linear-gradient(var(--grid-color) 1px, transparent 1px),
         linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
       background-size: 24px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       z-index: 500;
     }
-
     .login-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -64,511 +60,230 @@
       width: min(380px, calc(100vw - 40px));
       text-align: center;
       box-shadow: 0 8px 40px rgba(0,0,0,0.09);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
     }
-
     .login-logo {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
     }
+    .login-title { font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+    .login-sub   { font-size: 13.5px; color: var(--ink-dim); line-height: 1.5; max-width: 260px; }
+    .login-rule  { width: 36px; height: 2px; background: var(--border); border-radius: 1px; }
+    #gsi-button  { margin-top: 4px; }
+    .login-note  { font-size: 11px; color: var(--ink-dim); line-height: 1.6; max-width: 280px; }
 
-    .login-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1.2;
-    }
-
-    .login-sub {
-      font-size: 13.5px;
-      color: var(--ink-dim);
-      line-height: 1.5;
-      max-width: 260px;
-    }
-
-    .login-rule {
-      width: 36px;
-      height: 2px;
-      background: var(--border);
-      border-radius: 1px;
-    }
-
-    #gsi-button {
-      margin-top: 4px;
-      /* Google's button has its own sizing */
-    }
-
-    .login-note {
-      font-size: 11px;
-      color: var(--ink-dim);
-      line-height: 1.6;
-      max-width: 280px;
-    }
-
-    /* ── Header ─────────────────────────────────────────── */
+    /* ── Header ────────────────────────────────────────────── */
     header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: sticky; top: 0; z-index: 100;
       background: rgba(245, 242, 236, 0.94);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
       padding: 0 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      display: flex; align-items: center; gap: 14px;
       height: var(--header-h);
     }
-
     .header-logo {
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--accent);
-      white-space: nowrap;
-      user-select: none;
+      font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--accent); white-space: nowrap; user-select: none;
     }
-
-    .header-sep {
-      width: 1px;
-      height: 18px;
-      background: var(--border-dark);
-      flex-shrink: 0;
-    }
-
-    /* Candidate tabs */
+    .header-sep { width: 1px; height: 18px; background: var(--border-dark); flex-shrink: 0; }
     .tabs { display: flex; gap: 4px; }
-
     .tab {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 5px 14px;
-      border-radius: 20px;
-      border: 1px solid transparent;
-      background: none;
-      cursor: pointer;
-      font-family: 'Outfit', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--ink-dim);
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 14px; border-radius: 20px; border: 1px solid transparent;
+      background: none; cursor: pointer; font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 500; color: var(--ink-dim);
       transition: color 0.15s, background 0.15s, border-color 0.15s, box-shadow 0.15s;
     }
     .tab:hover { color: var(--ink); background: var(--accent-light); }
-    .tab.active {
-      color: var(--ink);
-      border-color: var(--border-dark);
-      background: var(--surface);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-    }
-
+    .tab.active { color: var(--ink); border-color: var(--border-dark); background: var(--surface); box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
     .tab-badge {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 1px 7px;
-      border-radius: 10px;
-      color: white;
-      background: var(--ink-dim);
-      transition: background 0.2s;
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+      padding: 1px 7px; border-radius: 10px; color: white;
+      background: var(--ink-dim); transition: background 0.2s;
     }
     .tab.active .tab-badge { background: var(--accent); }
+    .header-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
 
-    .header-actions {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* User badge */
     .user-pill {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 3px 10px 3px 4px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: var(--surface);
+      display: flex; align-items: center; gap: 7px;
+      padding: 3px 10px 3px 4px; border-radius: 20px;
+      border: 1px solid var(--border); background: var(--surface);
     }
-
-    .user-avatar {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1px solid var(--border);
-      display: block;
-    }
-
-    .user-name {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ink);
-      white-space: nowrap;
-    }
+    .user-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); display: block; }
+    .user-name   { font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; }
 
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border-dark);
-      background: var(--surface);
-      cursor: pointer;
-      font-family: 'Outfit', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ink);
-      transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
-      white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--radius); border: 1px solid var(--border-dark);
+      background: var(--surface); cursor: pointer; font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 500; color: var(--ink);
+      transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s; white-space: nowrap;
     }
     .btn:hover { border-color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-    .btn-primary {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
+    .btn-primary { background: var(--accent); color: white; border-color: var(--accent); }
     .btn-primary:hover { opacity: 0.88; border-color: var(--accent); box-shadow: none; }
-    .btn-ghost {
-      border-color: transparent;
-      background: none;
-      color: var(--ink-dim);
-      padding: 6px 10px;
-    }
+    .btn-ghost { border-color: transparent; background: none; color: var(--ink-dim); padding: 6px 10px; }
     .btn-ghost:hover { background: var(--accent-light); border-color: transparent; box-shadow: none; color: var(--ink); }
 
-    /* ── Layout ─────────────────────────────────────────── */
+    /* ── Layout ────────────────────────────────────────────── */
     .app-layout {
-      display: grid;
-      grid-template-columns: var(--sidebar-w) 1fr;
-      min-height: calc(100vh - var(--header-h));
-      align-items: start;
+      display: grid; grid-template-columns: var(--sidebar-w) 1fr;
+      min-height: calc(100vh - var(--header-h)); align-items: start;
     }
 
-    /* ── Sidebar ─────────────────────────────────────────── */
+    /* ── Sidebar ───────────────────────────────────────────── */
     aside {
-      position: sticky;
-      top: var(--header-h);
-      height: calc(100vh - var(--header-h));
-      overflow-y: auto;
-      border-right: 1px solid var(--border);
-      padding: 18px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h));
+      overflow-y: auto; border-right: 1px solid var(--border);
+      padding: 18px 14px; display: flex; flex-direction: column; gap: 12px;
       background: rgba(245, 242, 236, 0.60);
     }
-
     aside::-webkit-scrollbar { width: 4px; }
     aside::-webkit-scrollbar-thumb { background: rgba(15,15,15,0.12); border-radius: 2px; }
-
-    .s-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 13px 14px;
-    }
-
+    .s-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 14px; }
     .s-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 9.5px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-dim);
-      margin-bottom: 10px;
+      font-family: 'DM Mono', monospace; font-size: 9.5px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-dim); margin-bottom: 10px;
     }
-
-    /* Big % */
-    .pct-big {
-      font-family: 'DM Mono', monospace;
-      font-size: 40px;
-      font-weight: 400;
-      line-height: 1;
-      color: var(--ink);
-      transition: color 0.3s;
-    }
-    .pct-sub {
-      font-size: 12px;
-      color: var(--ink-dim);
-      margin-top: 5px;
-    }
-    .bar-wrap {
-      height: 5px;
-      background: rgba(15,15,15,0.09);
-      border-radius: 3px;
-      overflow: hidden;
-      margin-top: 12px;
-    }
-    .bar-fill {
-      height: 100%;
-      border-radius: 3px;
-      background: var(--accent);
-      transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    /* Competency bars */
+    .pct-big { font-family: 'DM Mono', monospace; font-size: 40px; font-weight: 400; line-height: 1; color: var(--ink); }
+    .pct-sub { font-size: 12px; color: var(--ink-dim); margin-top: 5px; }
+    .bar-wrap { height: 5px; background: rgba(15,15,15,0.09); border-radius: 3px; overflow: hidden; margin-top: 12px; }
+    .bar-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
     .comp-list { display: flex; flex-direction: column; gap: 9px; }
     .comp-item { display: flex; flex-direction: column; gap: 3px; }
     .comp-row-head { display: flex; justify-content: space-between; align-items: baseline; }
     .comp-name { font-size: 11.5px; font-weight: 500; color: var(--ink); }
-    .comp-frac {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: var(--ink-dim);
-    }
+    .comp-frac { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-dim); }
     .comp-bar-wrap { height: 3px; background: rgba(15,15,15,0.09); border-radius: 2px; overflow: hidden; }
     .comp-bar-fill { height: 100%; border-radius: 2px; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
-
-    /* Readiness */
     .readiness-label { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
     .readiness-desc  { font-size: 12px; color: var(--ink-dim); line-height: 1.5; }
 
-    /* ── Main ─────────────────────────────────────────────── */
-    main { padding: 18px 22px 40px; }
-
-    /* Filter chips */
-    .filters {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-    }
-
+    /* ── Main ──────────────────────────────────────────────── */
+    main { padding: 18px 22px 40px; transition: padding-bottom 0.2s; }
+    .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
     .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 12px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      cursor: pointer;
-      font-family: 'Outfit', sans-serif;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--ink-dim);
-      transition: color 0.12s, background 0.12s, border-color 0.12s;
-      user-select: none;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border);
+      background: var(--surface); cursor: pointer; font-family: 'Outfit', sans-serif;
+      font-size: 12px; font-weight: 500; color: var(--ink-dim);
+      transition: color 0.12s, background 0.12s, border-color 0.12s; user-select: none;
     }
     .chip:hover { color: var(--ink); border-color: var(--border-dark); }
     .chip.active { background: var(--accent); color: white; border-color: var(--accent); }
-
     .chip-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .chip-n {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      opacity: 0.70;
-    }
-
-    /* Module groups */
+    .chip-n   { font-family: 'DM Mono', monospace; font-size: 10px; opacity: 0.70; }
     .module-group { margin-bottom: 22px; }
-
-    .group-head {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding-bottom: 7px;
-      margin-bottom: 7px;
-      border-bottom: 1px solid var(--border);
-    }
+    .group-head { display: flex; align-items: center; gap: 8px; padding-bottom: 7px; margin-bottom: 7px; border-bottom: 1px solid var(--border); }
     .group-dot  { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-    .group-name {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--ink-dim);
-    }
-    .group-frac {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--ink-dim);
-      margin-left: auto;
-    }
-
-    /* Cards */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0);   }
-    }
-
+    .group-name { font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-dim); }
+    .group-frac { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-dim); margin-left: auto; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     .module-card {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 9px 12px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: var(--surface);
-      margin-bottom: 5px;
-      cursor: pointer;
+      display: flex; align-items: center; gap: 11px;
+      padding: 9px 12px; border-radius: var(--radius); border: 1px solid var(--border);
+      background: var(--surface); margin-bottom: 5px; cursor: pointer;
       transition: border-color 0.13s, background 0.13s, box-shadow 0.13s;
-      animation: fadeIn 0.28s ease both;
-      animation-delay: var(--delay, 0ms);
+      animation: fadeIn 0.28s ease both; animation-delay: var(--delay, 0ms);
     }
-    .module-card:hover {
-      border-color: var(--border-dark);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .module-card.done {
-      background: var(--green-light);
-      border-color: var(--green-border);
-    }
-
-    /* Check circle */
+    .module-card:hover { border-color: var(--border-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .module-card.done { background: var(--green-light); border-color: var(--green-border); }
+    .module-card.now-playing { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
     .check-ring {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid var(--border-dark);
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: background 0.15s, border-color 0.15s;
+      width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border-dark);
+      background: var(--bg); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background 0.15s, border-color 0.15s;
     }
-    .module-card.done .check-ring {
-      background: var(--green);
-      border-color: var(--green);
-    }
+    .module-card.done .check-ring { background: var(--green); border-color: var(--green); }
     .check-ring svg { display: none; }
     .module-card.done .check-ring svg { display: block; }
-
-    /* Module info */
     .mod-info { flex: 1; min-width: 0; }
-    .mod-pn {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: var(--ink-dim);
-      margin-bottom: 1px;
-    }
-    .mod-name {
-      font-size: 13.5px;
-      font-weight: 500;
-      color: var(--ink);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      transition: color 0.13s;
-    }
-    .module-card.done .mod-name {
-      text-decoration: line-through;
-      color: var(--ink-dim);
-    }
-
+    .mod-pn   { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-dim); margin-bottom: 1px; }
+    .mod-name { font-size: 13.5px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.13s; }
+    .module-card.done .mod-name { text-decoration: line-through; color: var(--ink-dim); }
     .mod-meta { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
-    .mod-dur {
-      font-family: 'DM Mono', monospace;
-      font-size: 10.5px;
-      color: var(--ink-dim);
-    }
+    .mod-dur  { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--ink-dim); }
     .mod-cat-dot { width: 7px; height: 7px; border-radius: 50%; }
 
-    /* Empty state */
-    .empty {
-      text-align: center;
-      padding: 48px 0;
-      color: var(--ink-dim);
-      font-size: 14px;
+    /* Play button on card */
+    .play-btn {
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 1px solid var(--border-dark); background: var(--surface);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: var(--ink-dim);
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
+    .play-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+    .play-btn.is-playing { background: var(--accent); border-color: var(--accent); color: white; }
+    .play-btn.no-audio   { opacity: 0.35; cursor: default; }
 
-    /* ── Modal ─────────────────────────────────────────────── */
-    .overlay {
+    .empty { text-align: center; padding: 48px 0; color: var(--ink-dim); font-size: 14px; }
+
+    /* ── Player bar ─────────────────────────────────────────── */
+    #player-bar {
       display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.38);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: var(--player-h);
+      background: var(--ink); color: white;
+      align-items: center; gap: 16px;
+      padding: 0 20px;
+      z-index: 150;
+      box-shadow: 0 -2px 16px rgba(0,0,0,0.20);
     }
-    .overlay.open { display: flex; }
 
-    .modal {
-      background: var(--surface);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      width: min(660px, calc(100vw - 40px));
-      max-height: calc(100vh - 40px);
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.18);
-    }
-    .modal-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border);
-    }
-    .modal-title { font-size: 15px; font-weight: 600; }
-    .modal-close {
-      width: 28px; height: 28px;
-      border-radius: 6px;
-      border: none;
-      background: none;
-      cursor: pointer;
+    .pb-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
+    .pb-pn   { font-family: 'DM Mono', monospace; font-size: 9.5px; opacity: 0.55; }
+    .pb-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .pb-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .pb-btn {
+      width: 32px; height: 32px; border-radius: 50%; border: none;
+      background: rgba(255,255,255,0.10); color: white; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      color: var(--ink-dim);
-      font-size: 20px;
-      line-height: 1;
+      transition: background 0.15s;
     }
+    .pb-btn:hover { background: rgba(255,255,255,0.20); }
+    .pb-btn-main { width: 38px; height: 38px; background: white; color: var(--ink); }
+    .pb-btn-main:hover { opacity: 0.90; background: white; }
+
+    .pb-progress { display: flex; align-items: center; gap: 9px; flex: 1; max-width: 420px; }
+    .pb-time { font-family: 'DM Mono', monospace; font-size: 11px; opacity: 0.55; white-space: nowrap; min-width: 36px; }
+    .pb-time.right { text-align: right; }
+    .pb-seek {
+      flex: 1; -webkit-appearance: none; appearance: none;
+      height: 3px; border-radius: 2px;
+      background: linear-gradient(to right, rgba(255,255,255,0.7) var(--prog, 0%), rgba(255,255,255,0.18) var(--prog, 0%));
+      outline: none; cursor: pointer;
+    }
+    .pb-seek::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 13px; height: 13px;
+      border-radius: 50%; background: white; cursor: pointer;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+    .pb-close {
+      width: 28px; height: 28px; border-radius: 50%; border: none;
+      background: rgba(255,255,255,0.10); color: white; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; line-height: 1; flex-shrink: 0; transition: background 0.15s;
+    }
+    .pb-close:hover { background: rgba(255,255,255,0.22); }
+
+    /* ── Modal ──────────────────────────────────────────────── */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.38); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; }
+    .overlay.open { display: flex; }
+    .modal { background: var(--surface); border-radius: 12px; border: 1px solid var(--border); width: min(660px, calc(100vw - 40px)); max-height: calc(100vh - 40px); display: flex; flex-direction: column; box-shadow: 0 24px 60px rgba(0,0,0,0.18); }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+    .modal-title { font-size: 15px; font-weight: 600; }
+    .modal-close { width: 28px; height: 28px; border-radius: 6px; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink-dim); font-size: 20px; line-height: 1; }
     .modal-close:hover { background: rgba(15,15,15,0.06); color: var(--ink); }
     .modal-body { flex: 1; overflow-y: auto; padding: 16px 18px; }
-    .modal-foot {
-      padding: 12px 18px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-    }
+    .modal-foot { padding: 12px 18px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+    #summary-pre { font-family: 'DM Mono', monospace; font-size: 11.5px; line-height: 1.75; white-space: pre-wrap; color: var(--ink); background: rgba(15,15,15,0.025); padding: 14px; border-radius: 6px; border: 1px solid var(--border); }
 
-    #summary-pre {
-      font-family: 'DM Mono', monospace;
-      font-size: 11.5px;
-      line-height: 1.75;
-      white-space: pre-wrap;
-      color: var(--ink);
-      background: rgba(15,15,15,0.025);
-      padding: 14px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-    }
-
-    /* ── Toast ─────────────────────────────────────────────── */
-    #toast {
-      position: fixed;
-      bottom: 22px;
-      right: 22px;
-      background: var(--ink);
-      color: white;
-      padding: 9px 16px;
-      border-radius: var(--radius);
-      font-size: 13px;
-      font-weight: 500;
-      z-index: 300;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.18s, transform 0.18s;
-      pointer-events: none;
-      max-width: 320px;
-    }
+    /* ── Toast ──────────────────────────────────────────────── */
+    #toast { position: fixed; bottom: 82px; right: 22px; background: var(--ink); color: white; padding: 9px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 500; z-index: 300; opacity: 0; transform: translateY(6px); transition: opacity 0.18s, transform 0.18s; pointer-events: none; max-width: 320px; }
     #toast.show { opacity: 1; transform: translateY(0); }
 
     /* ── Scrollbars ─────────────────────────────────────────── */
@@ -584,84 +299,81 @@
   <div class="login-card">
     <div class="login-logo">NZRAB&#8202;·&#8202;NPE</div>
     <div class="login-title">Module Tracker</div>
-    <div class="login-sub">Sign in to access your study progress for the Named Pathway Exam.</div>
+    <div class="login-sub">Sign in to access your study progress and audio library.</div>
     <div class="login-rule"></div>
     <div id="gsi-button"></div>
     <div class="login-note">Access is restricted to authorised accounts.<br>Progress is stored in your browser.</div>
   </div>
 </div>
 
-<!-- ── App (hidden until authenticated) ─────────────────── -->
+<!-- ── App ──────────────────────────────────────────────── -->
 <div id="app" style="display:none">
 
-  <!-- Header -->
   <header>
     <span class="header-logo">NZRAB&#8202;·&#8202;NPE</span>
     <div class="header-sep"></div>
     <div class="tabs" id="tabs">
-      <button class="tab active" data-c="amelia" onclick="switchCandidate('amelia')">
-        Amelia <span class="tab-badge" id="badge-amelia">0%</span>
-      </button>
-      <button class="tab" data-c="matamoana" onclick="switchCandidate('matamoana')">
-        Matamoana <span class="tab-badge" id="badge-matamoana">0%</span>
-      </button>
+      <button class="tab active" data-c="amelia"    onclick="switchCandidate('amelia')">Amelia    <span class="tab-badge" id="badge-amelia">0%</span></button>
+      <button class="tab"        data-c="matamoana" onclick="switchCandidate('matamoana')">Matamoana <span class="tab-badge" id="badge-matamoana">0%</span></button>
     </div>
     <div class="header-actions">
       <div id="user-badge"></div>
       <div class="header-sep"></div>
       <button class="btn" onclick="generateSummary()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14,2 14,8 20,8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/>
-          <line x1="16" y1="17" x2="8" y2="17"/>
-        </svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         Weekly Summary
       </button>
       <button class="btn btn-primary" onclick="saveState(); showToast('Progress saved')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-          <polyline points="17,21 17,13 7,13 7,21"/>
-          <polyline points="7,3 7,8 15,8"/>
-        </svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
         Save
       </button>
     </div>
   </header>
 
-  <!-- App body -->
   <div class="app-layout">
-
-    <!-- Sidebar -->
     <aside>
       <div class="s-card">
         <div class="s-label">Overall Progress</div>
         <div class="pct-big" id="pct-big">0%</div>
         <div class="pct-sub" id="pct-sub">0 of 43 modules complete</div>
-        <div class="bar-wrap">
-          <div class="bar-fill" id="bar-overall" style="width:0%"></div>
-        </div>
+        <div class="bar-wrap"><div class="bar-fill" id="bar-overall" style="width:0%"></div></div>
       </div>
-
       <div class="s-card">
         <div class="s-label">Competency Coverage</div>
         <div class="comp-list" id="comp-list"></div>
       </div>
-
       <div class="s-card">
         <div class="s-label">Readiness</div>
         <div class="readiness-label" id="readiness-label">Not Started</div>
         <div class="readiness-desc"  id="readiness-desc">Begin with any category to build momentum.</div>
       </div>
     </aside>
-
-    <!-- Main content -->
-    <main>
-      <div class="filters"     id="filters"></div>
+    <main id="main-area">
+      <div class="filters"    id="filters"></div>
       <div id="module-list"></div>
     </main>
+  </div>
 
-  </div><!-- /app-layout -->
+  <!-- Player bar -->
+  <div id="player-bar">
+    <div class="pb-info">
+      <div class="pb-pn"   id="pb-pn"></div>
+      <div class="pb-name" id="pb-name"></div>
+    </div>
+    <div class="pb-controls">
+      <button class="pb-btn pb-btn-main" id="pb-playbtn" onclick="togglePlayback()" title="Play / Pause">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+      </button>
+    </div>
+    <div class="pb-progress">
+      <span class="pb-time" id="pb-cur">0:00</span>
+      <input class="pb-seek" id="pb-seek" type="range" min="0" max="100" value="0"
+             oninput="seekTo(this.value)" style="--prog:0%">
+      <span class="pb-time right" id="pb-dur">0:00</span>
+    </div>
+    <button class="pb-close" onclick="stopPlayer()" title="Close player">&times;</button>
+  </div>
+
 </div><!-- /app -->
 
 <!-- ── Weekly Summary Modal ─────────────────────────────── -->
@@ -671,78 +383,47 @@
       <span class="modal-title">Weekly Summary</span>
       <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
     </div>
-    <div class="modal-body">
-      <pre id="summary-pre"></pre>
-    </div>
+    <div class="modal-body"><pre id="summary-pre"></pre></div>
     <div class="modal-foot">
       <button class="btn" onclick="closeModal()">Close</button>
       <button class="btn btn-primary" onclick="copyToClipboard()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="9" y="9" width="13" height="13" rx="2"/>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-        </svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         Copy to Clipboard
       </button>
     </div>
   </div>
 </div>
 
-<!-- Toast -->
 <div id="toast"></div>
 
 <!-- ── Script ────────────────────────────────────────────── -->
 <script>
 'use strict';
 
-// ── Config ─────────────────────────────────────────────────
-//
-// 1. Replace GOOGLE_CLIENT_ID with your OAuth 2.0 Client ID from:
-//    https://console.cloud.google.com/
-//    APIs & Services → Credentials → Create Credentials → OAuth 2.0 Client ID
-//    Application type: Web application
-//    Authorised JavaScript origin: https://nuku-studio.github.io
-//
-// 2. Optionally map each person's Gmail address to their candidate tab.
-//    If an email matches, the tab auto-switches on login.
-//    Leave commented out to keep manual tab switching.
-
+// ─────────────────────────────────────────────────────────────
+// CONFIG — replace client ID after creating Google Cloud creds
+// ─────────────────────────────────────────────────────────────
 const GOOGLE_CLIENT_ID = 'REPLACE_WITH_YOUR_CLIENT_ID';
 
+// Map each person's Gmail → candidate tab (optional but recommended)
 const CANDIDATE_EMAILS = {
   // 'amelia@gmail.com':    'amelia',
   // 'matamoana@gmail.com': 'matamoana',
 };
 
-// ── Auth ───────────────────────────────────────────────────
+// Drive folder containing the MP3s (Amelia's folder — both are identical content)
+const MP3_FOLDER_ID = '1ItAlNyrqKZ6p1oWjxldOO4bFfjBGEqm8';
 
+// ─────────────────────────────────────────────────────────────
+// AUTH
+// ─────────────────────────────────────────────────────────────
 const AUTH_KEY = 'nzrab-auth-v1';
 
-function getAuth() {
-  try { return JSON.parse(localStorage.getItem(AUTH_KEY)); }
-  catch { return null; }
-}
+function getAuth()       { try { return JSON.parse(localStorage.getItem(AUTH_KEY)); } catch { return null; } }
+function setAuth(p)      { localStorage.setItem(AUTH_KEY, JSON.stringify({ name: p.name, email: p.email, picture: p.picture, sub: p.sub })); }
+function clearAuth()     { localStorage.removeItem(AUTH_KEY); }
+function parseJwt(token) { const b = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'); return JSON.parse(atob(b)); }
 
-function setAuth(payload) {
-  localStorage.setItem(AUTH_KEY, JSON.stringify({
-    name:    payload.name,
-    email:   payload.email,
-    picture: payload.picture,
-    sub:     payload.sub,
-  }));
-}
-
-function clearAuth() {
-  localStorage.removeItem(AUTH_KEY);
-}
-
-// Decode the JWT credential returned by Google (no verification needed
-// client-side — we just want the display fields).
-function parseJwt(token) {
-  const b64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-  return JSON.parse(atob(b64));
-}
-
-// Called by Google's GSI library after sign-in
 function onGoogleSignIn(response) {
   const payload = parseJwt(response.credential);
   setAuth(payload);
@@ -753,32 +434,23 @@ function showApp(auth) {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   renderUserBadge(auth);
-
-  // Auto-switch to the mapped candidate tab (if configured)
   const mapped = CANDIDATE_EMAILS[auth.email];
   if (mapped) activeCandidate = mapped;
-
   renderAll();
+  requestDriveToken(); // fetch MP3 file list after sign-in
 }
 
 function renderUserBadge(auth) {
   const firstName = (auth.name || auth.email).split(' ')[0];
   document.getElementById('user-badge').innerHTML = `
     <div class="user-pill">
-      <img class="user-avatar" src="${auth.picture || ''}"
-           alt="${firstName}"
-           onerror="this.style.display='none'">
+      <img class="user-avatar" src="${auth.picture || ''}" alt="${firstName}" onerror="this.style.display='none'">
       <span class="user-name">${firstName}</span>
     </div>
     <button class="btn btn-ghost" onclick="signOut()" title="Sign out">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-        <polyline points="16,17 21,12 16,7"/>
-        <line x1="21" y1="12" x2="9" y2="12"/>
-      </svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       Sign out
-    </button>
-  `;
+    </button>`;
 }
 
 function signOut() {
@@ -787,40 +459,210 @@ function signOut() {
     google.accounts.id.revoke(auth.email, () => {});
     google.accounts.id.disableAutoSelect();
   }
+  stopPlayer();
   clearAuth();
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
   initGoogleSignIn();
 }
 
-// ── GSI library init ───────────────────────────────────────
-
-let _gsiReady = false;
+// ─────────────────────────────────────────────────────────────
+// GSI + DRIVE TOKEN
+// ─────────────────────────────────────────────────────────────
+let _gsiReady        = false;
+let driveTokenClient = null;
+let driveToken       = null;
 
 function initGoogleSignIn() {
-  if (typeof google === 'undefined' || !google.accounts) {
-    _gsiReady = true; // library not loaded yet; onGsiLibraryLoaded() will call us
+  if (typeof google === 'undefined' || !google.accounts) { _gsiReady = true; return; }
+
+  google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onGoogleSignIn, ux_mode: 'popup' });
+  google.accounts.id.renderButton(document.getElementById('gsi-button'),
+    { theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular', width: 280 });
+  google.accounts.id.prompt();
+
+  if (GOOGLE_CLIENT_ID !== 'REPLACE_WITH_YOUR_CLIENT_ID') {
+    driveTokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: 'https://www.googleapis.com/auth/drive.readonly',
+      callback: onDriveToken,
+    });
+  }
+}
+
+function onGsiLibraryLoaded() { if (_gsiReady) initGoogleSignIn(); }
+
+function requestDriveToken() {
+  if (!driveTokenClient) return;
+  driveTokenClient.requestAccessToken({ prompt: '' }); // silent if already granted
+}
+
+async function onDriveToken(resp) {
+  if (resp.error) { console.warn('Drive token error:', resp.error); return; }
+  driveToken = resp.access_token;
+  await loadDriveFiles();
+}
+
+// ─────────────────────────────────────────────────────────────
+// DRIVE FILE MAP
+// ─────────────────────────────────────────────────────────────
+let driveFileMap  = {}; // moduleId -> Drive fileId
+let driveReady    = false;
+
+async function loadDriveFiles() {
+  try {
+    const files = await fetchAllFiles(MP3_FOLDER_ID);
+    driveFileMap = buildFileMap(files);
+    driveReady   = true;
+    renderModuleList(); // refresh play buttons now that IDs are known
+  } catch (e) {
+    console.warn('Drive file load failed:', e);
+  }
+}
+
+async function fetchAllFiles(folderId) {
+  const all = [];
+  let pageToken = '';
+  do {
+    const url = new URL('https://www.googleapis.com/drive/v3/files');
+    url.searchParams.set('q',         `'${folderId}' in parents and trashed=false`);
+    url.searchParams.set('fields',    'nextPageToken,files(id,name)');
+    url.searchParams.set('pageSize',  '200');
+    if (pageToken) url.searchParams.set('pageToken', pageToken);
+    const resp = await fetch(url.toString(), { headers: { Authorization: `Bearer ${driveToken}` } });
+    const data = await resp.json();
+    all.push(...(data.files || []));
+    pageToken = data.nextPageToken || '';
+  } while (pageToken);
+  return all;
+}
+
+function buildFileMap(files) {
+  const map = {};
+  for (const m of MODULES) {
+    const f = findFile(files, m.id);
+    if (f) map[m.id] = f.id;
+  }
+  return map;
+}
+
+function findFile(files, moduleId) {
+  if (moduleId === 'ipenz22') return files.find(f => f.name.toLowerCase().includes('pn22'));
+  const match = moduleId.match(/pn[_-](\d+\.\d+\w*)/i);
+  if (!match) return null;
+  const num = match[1]; // e.g. '1.227', '3.101r'
+  return files.find(f => {
+    const n = f.name.toLowerCase();
+    return n.includes(`pn_${num}`) || n.includes(`pn-${num}`);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────
+// AUDIO PLAYER
+// ─────────────────────────────────────────────────────────────
+const audio    = new Audio();
+let   currentId = null;
+
+audio.addEventListener('timeupdate', syncPlayerBar);
+audio.addEventListener('ended', () => { currentId = null; renderModuleList(); syncPlayerBar(); });
+audio.addEventListener('error',  () => { showToast('Playback error — try again'); currentId = null; renderModuleList(); });
+
+function playModule(moduleId) {
+  // Toggle pause/resume for same module
+  if (currentId === moduleId) {
+    audio.paused ? audio.play() : audio.pause();
+    renderModuleList();
+    syncPlayerBar();
     return;
   }
-  google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback:  onGoogleSignIn,
-    ux_mode:   'popup',
+
+  const fileId = driveFileMap[moduleId];
+  if (!fileId) {
+    showToast(driveReady ? 'Audio not found for this module' : 'Audio loading — try again shortly');
+    return;
+  }
+  if (!driveToken) { showToast('Audio access not yet authorised'); return; }
+
+  audio.pause();
+  audio.src = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&access_token=${driveToken}`;
+  currentId  = moduleId;
+
+  audio.play().catch(err => {
+    if (err.name !== 'AbortError') showToast('Click play to start audio');
   });
-  google.accounts.id.renderButton(
-    document.getElementById('gsi-button'),
-    { theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular', width: 280 }
-  );
-  google.accounts.id.prompt(); // show One Tap if available
+
+  // Show / update player bar
+  const m = MODULES.find(m => m.id === moduleId);
+  document.getElementById('pb-pn').textContent   = m.pn;
+  document.getElementById('pb-name').textContent = m.name;
+  document.getElementById('player-bar').style.display = 'flex';
+  document.getElementById('main-area').style.paddingBottom = '80px';
+
+  renderModuleList();
+  syncPlayerBar();
 }
 
-// Called by the GSI <script> onload
-function onGsiLibraryLoaded() {
-  if (_gsiReady) initGoogleSignIn();
+function togglePlayback() {
+  if (!currentId) return;
+  audio.paused ? audio.play() : audio.pause();
+  renderModuleList();
+  syncPlayerBar();
 }
 
-// ── Data ───────────────────────────────────────────────────
+function seekTo(val) {
+  if (audio.duration) {
+    audio.currentTime = (val / 100) * audio.duration;
+    syncPlayerBar();
+  }
+}
 
+function stopPlayer() {
+  audio.pause();
+  audio.src = '';
+  currentId  = null;
+  document.getElementById('player-bar').style.display = 'none';
+  document.getElementById('main-area').style.paddingBottom = '';
+  renderModuleList();
+}
+
+function syncPlayerBar() {
+  const dur  = audio.duration || 0;
+  const cur  = audio.currentTime || 0;
+  const prog = dur > 0 ? (cur / dur) * 100 : 0;
+
+  const seekEl = document.getElementById('pb-seek');
+  if (seekEl) {
+    seekEl.value = prog;
+    seekEl.style.setProperty('--prog', prog + '%');
+  }
+
+  const curEl = document.getElementById('pb-cur');
+  const durEl = document.getElementById('pb-dur');
+  if (curEl) curEl.textContent = fmtTime(cur);
+  if (durEl) durEl.textContent = fmtTime(dur);
+
+  const btn = document.getElementById('pb-playbtn');
+  if (btn) {
+    btn.innerHTML = audio.paused
+      ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>`
+      : `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
+  }
+}
+
+function fmtTime(s) {
+  if (!s || isNaN(s)) return '0:00';
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60).toString().padStart(2, '0');
+  return `${m}:${sec}`;
+}
+
+// Play icon SVGs
+const SVG_PLAY  = `<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>`;
+const SVG_PAUSE = `<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
+
+// ─────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────
 const CATEGORIES = [
   { id: 'admin',    label: 'Administration',       code: '01', colour: '#6366f1', competency: 'Practice Context'        },
   { id: 'client',   label: 'Client Relationships',  code: '02', colour: '#0ea5e9', competency: 'Pre-Design'              },
@@ -830,7 +672,6 @@ const CATEGORIES = [
   { id: 'legal',    label: 'Legal & Financial',      code: '06', colour: '#8b5cf6', competency: 'Practice Context'        },
   { id: 'hs',       label: 'Health & Safety',        code: '07', colour: '#ec4899', competency: 'Practice Context'        },
 ];
-
 const COMPETENCIES = [
   { id: 'Practice Context',        colour: '#6366f1' },
   { id: 'Pre-Design',              colour: '#0ea5e9' },
@@ -838,60 +679,51 @@ const COMPETENCIES = [
   { id: 'Documentation',           colour: '#f59e0b' },
   { id: 'Contract Administration', colour: '#ef4444' },
 ];
-
 const MODULES = [
-  // ── 01 Administration (6) ────────────────────────────────
-  { id: 'pn_1.101',  pn: 'pn_1.101',  name: 'Commission Where Prior Architect Involved',             categoryId: 'admin',    dur: 5  },
-  { id: 'pn_1.102',  pn: 'pn_1.102',  name: 'Complaints Procedures',                                  categoryId: 'admin',    dur: 6  },
-  { id: 'pn_1.201',  pn: 'pn_1.201',  name: 'PI Insurance & Managing Practice Risk',                  categoryId: 'admin',    dur: 7  },
-  { id: 'pn_1.217',  pn: 'pn_1.217',  name: 'Contractual Liability',                                  categoryId: 'admin',    dur: 5  },
-  { id: 'pn_1.227',  pn: 'pn_1.227',  name: 'Clause Options, Certificates and Statements',            categoryId: 'admin',    dur: 5  },
-  { id: 'pn_1.317',  pn: 'pn_1.317',  name: 'Responsibilities to Graduates on Pathway to Registration', categoryId: 'admin',  dur: 5  },
-  // ── 02 Client Relationships (4) ──────────────────────────
-  { id: 'pn_5.101',  pn: 'pn_5.101',  name: 'Initial Client Meeting',                                  categoryId: 'client',   dur: 5  },
-  { id: 'pn_5.102',  pn: 'pn_5.102',  name: 'Urban Design Panel',                                      categoryId: 'client',   dur: 5  },
+  { id: 'pn_1.101',  pn: 'pn_1.101',  name: 'Commission Where Prior Architect Involved',             categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.102',  pn: 'pn_1.102',  name: 'Complaints Procedures',                                  categoryId: 'admin',    dur: 6 },
+  { id: 'pn_1.201',  pn: 'pn_1.201',  name: 'PI Insurance & Managing Practice Risk',                  categoryId: 'admin',    dur: 7 },
+  { id: 'pn_1.217',  pn: 'pn_1.217',  name: 'Contractual Liability',                                  categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.227',  pn: 'pn_1.227',  name: 'Clause Options, Certificates and Statements',            categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.317',  pn: 'pn_1.317',  name: 'Responsibilities to Graduates on Pathway to Registration', categoryId: 'admin',  dur: 5 },
+  { id: 'pn_5.101',  pn: 'pn_5.101',  name: 'Initial Client Meeting',                                  categoryId: 'client',   dur: 5 },
+  { id: 'pn_5.102',  pn: 'pn_5.102',  name: 'Urban Design Panel',                                      categoryId: 'client',   dur: 5 },
   { id: 'pn_5.201',  pn: 'pn_5.201',  name: 'Environmentally Sustainable Design in Residential Buildings', categoryId: 'client', dur: 6 },
-  { id: 'pn_5.202',  pn: 'pn_5.202',  name: 'Built Heritage',                                          categoryId: 'client',   dur: 5  },
-  // ── 03 Design Process (6) ────────────────────────────────
-  { id: 'pn_2.101',  pn: 'pn_2.101',  name: 'Good Architectural Practice',                             categoryId: 'design',   dur: 5  },
-  { id: 'pn_2.102',  pn: 'pn_2.102',  name: 'Quality Control Checklist',                               categoryId: 'design',   dur: 5  },
-  { id: 'pn_2.104',  pn: 'pn_2.104',  name: 'Post Occupancy Evaluation',                               categoryId: 'design',   dur: 5  },
-  { id: 'pn_2.105',  pn: 'pn_2.105',  name: 'Design for Safety in Buildings',                          categoryId: 'design',   dur: 5  },
-  { id: 'pn_2.106',  pn: 'pn_2.106',  name: 'Internet Based Document Management',                      categoryId: 'design',   dur: 5  },
-  { id: 'pn_2.107',  pn: 'pn_2.107',  name: 'Building Information Modelling (BIM)',                    categoryId: 'design',   dur: 5  },
-  // ── 04 Documentation (7) ─────────────────────────────────
-  { id: 'pn_6.101',  pn: 'pn_6.101',  name: 'Intellectual Property & Copyright',                       categoryId: 'docs',     dur: 7  },
-  { id: 'pn_6.102',  pn: 'pn_6.102',  name: 'Control of Electronic Data Files',                        categoryId: 'docs',     dur: 5  },
-  { id: 'pn_6.104',  pn: 'pn_6.104',  name: 'Retention of Documents',                                  categoryId: 'docs',     dur: 5  },
-  { id: 'pn_6.105',  pn: 'pn_6.105',  name: 'CAD Files — Potential for Misuse',                        categoryId: 'docs',     dur: 4  },
-  { id: 'pn_9.301',  pn: 'pn_9.301',  name: 'Tendering Procedures',                                    categoryId: 'docs',     dur: 5  },
-  { id: 'pn_9.302',  pn: 'pn_9.302',  name: 'Tendering Proformas',                                     categoryId: 'docs',     dur: 4  },
-  { id: 'ipenz22',   pn: 'IPENZ pn22', name: 'Documenting Fire Safety Designs',                         categoryId: 'docs',     dur: 4  },
-  // ── 05 Contract Administration (10) ──────────────────────
-  { id: 'pn_3.101r', pn: 'pn_3.101r', name: 'Use of NZIA AAS 2008',                                    categoryId: 'contract', dur: 6  },
-  { id: 'pn_3.107',  pn: 'pn_3.107',  name: 'Limited Services',                                        categoryId: 'contract', dur: 5  },
-  { id: 'pn_3.111',  pn: 'pn_3.111',  name: 'Client Suitability: Accepting Architectural Commissions', categoryId: 'contract', dur: 5  },
-  { id: 'pn_3.117',  pn: 'pn_3.117',  name: 'Client Expectations',                                     categoryId: 'contract', dur: 5  },
-  { id: 'pn_3.128',  pn: 'pn_3.128',  name: 'NZIA AAS 2016 and NZIA AAS SF 2016',                      categoryId: 'contract', dur: 6  },
-  { id: 'pn_3.129',  pn: 'pn_3.129',  name: 'Observation by Architect',                                categoryId: 'contract', dur: 6  },
-  { id: 'pn_3.130',  pn: 'pn_3.130',  name: 'NZIA AAS 2018 / AAS SF 2018 / SPA 2018',                 categoryId: 'contract', dur: 5  },
+  { id: 'pn_5.202',  pn: 'pn_5.202',  name: 'Built Heritage',                                          categoryId: 'client',   dur: 5 },
+  { id: 'pn_2.101',  pn: 'pn_2.101',  name: 'Good Architectural Practice',                             categoryId: 'design',   dur: 5 },
+  { id: 'pn_2.102',  pn: 'pn_2.102',  name: 'Quality Control Checklist',                               categoryId: 'design',   dur: 5 },
+  { id: 'pn_2.104',  pn: 'pn_2.104',  name: 'Post Occupancy Evaluation',                               categoryId: 'design',   dur: 5 },
+  { id: 'pn_2.105',  pn: 'pn_2.105',  name: 'Design for Safety in Buildings',                          categoryId: 'design',   dur: 5 },
+  { id: 'pn_2.106',  pn: 'pn_2.106',  name: 'Internet Based Document Management',                      categoryId: 'design',   dur: 5 },
+  { id: 'pn_2.107',  pn: 'pn_2.107',  name: 'Building Information Modelling (BIM)',                    categoryId: 'design',   dur: 5 },
+  { id: 'pn_6.101',  pn: 'pn_6.101',  name: 'Intellectual Property & Copyright',                       categoryId: 'docs',     dur: 7 },
+  { id: 'pn_6.102',  pn: 'pn_6.102',  name: 'Control of Electronic Data Files',                        categoryId: 'docs',     dur: 5 },
+  { id: 'pn_6.104',  pn: 'pn_6.104',  name: 'Retention of Documents',                                  categoryId: 'docs',     dur: 5 },
+  { id: 'pn_6.105',  pn: 'pn_6.105',  name: 'CAD Files — Potential for Misuse',                        categoryId: 'docs',     dur: 4 },
+  { id: 'pn_9.301',  pn: 'pn_9.301',  name: 'Tendering Procedures',                                    categoryId: 'docs',     dur: 5 },
+  { id: 'pn_9.302',  pn: 'pn_9.302',  name: 'Tendering Proformas',                                     categoryId: 'docs',     dur: 4 },
+  { id: 'ipenz22',   pn: 'IPENZ pn22', name: 'Documenting Fire Safety Designs',                         categoryId: 'docs',     dur: 4 },
+  { id: 'pn_3.101r', pn: 'pn_3.101r', name: 'Use of NZIA AAS 2008',                                    categoryId: 'contract', dur: 6 },
+  { id: 'pn_3.107',  pn: 'pn_3.107',  name: 'Limited Services',                                        categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.111',  pn: 'pn_3.111',  name: 'Client Suitability: Accepting Architectural Commissions', categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.117',  pn: 'pn_3.117',  name: 'Client Expectations',                                     categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.128',  pn: 'pn_3.128',  name: 'NZIA AAS 2016 and NZIA AAS SF 2016',                      categoryId: 'contract', dur: 6 },
+  { id: 'pn_3.129',  pn: 'pn_3.129',  name: 'Observation by Architect',                                categoryId: 'contract', dur: 6 },
+  { id: 'pn_3.130',  pn: 'pn_3.130',  name: 'NZIA AAS 2018 / AAS SF 2018 / SPA 2018',                 categoryId: 'contract', dur: 5 },
   { id: 'pn_3.211',  pn: 'pn_3.211',  name: 'Payment Claims under the Construction Contracts Act 2002', categoryId: 'contract', dur: 5 },
-  { id: 'pn_4.201',  pn: 'pn_4.201',  name: 'Contract Enforcement',                                    categoryId: 'contract', dur: 5  },
-  { id: 'pn_9.601',  pn: 'pn_9.601',  name: 'Times for Starting & Completing',                         categoryId: 'contract', dur: 5  },
-  // ── 06 Legal & Financial (7) ─────────────────────────────
-  { id: 'pn_7.102',  pn: 'pn_7.102',  name: 'Agreement for Sub-consultant Services',                   categoryId: 'legal',    dur: 5  },
-  { id: 'pn_7.103',  pn: 'pn_7.103',  name: 'Agreement for Separate Consultant Services',              categoryId: 'legal',    dur: 5  },
-  { id: 'pn_9.101',  pn: 'pn_9.101',  name: 'Building Act — Consents',                                 categoryId: 'legal',    dur: 6  },
-  { id: 'pn_9.102',  pn: 'pn_9.102',  name: 'Building Act — Code Compliance Certificates',             categoryId: 'legal',    dur: 6  },
-  { id: 'pn_9.106',  pn: 'pn_9.106',  name: 'Producer Statements',                                     categoryId: 'legal',    dur: 5  },
-  { id: 'pn_9.109',  pn: 'pn_9.109',  name: 'Dispute Resolution — Arbitration Act',                    categoryId: 'legal',    dur: 6  },
-  { id: 'pn_9.206',  pn: 'pn_9.206',  name: 'NZIA SCC 2014 Overview',                                  categoryId: 'legal',    dur: 5  },
-  // ── 07 Health & Safety (3) ───────────────────────────────
-  { id: 'pn_1.219',  pn: 'pn_1.219',  name: 'Health and Safety at Work Act 2015',                      categoryId: 'hs',       dur: 5  },
-  { id: 'pn_1.221',  pn: 'pn_1.221',  name: 'Safety in On-Site Observation',                           categoryId: 'hs',       dur: 5  },
-  { id: 'pn_1.223',  pn: 'pn_1.223',  name: 'Seismic Considerations — EPBs',                           categoryId: 'hs',       dur: 5  },
+  { id: 'pn_4.201',  pn: 'pn_4.201',  name: 'Contract Enforcement',                                    categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.601',  pn: 'pn_9.601',  name: 'Times for Starting & Completing',                         categoryId: 'contract', dur: 5 },
+  { id: 'pn_7.102',  pn: 'pn_7.102',  name: 'Agreement for Sub-consultant Services',                   categoryId: 'legal',    dur: 5 },
+  { id: 'pn_7.103',  pn: 'pn_7.103',  name: 'Agreement for Separate Consultant Services',              categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.101',  pn: 'pn_9.101',  name: 'Building Act — Consents',                                 categoryId: 'legal',    dur: 6 },
+  { id: 'pn_9.102',  pn: 'pn_9.102',  name: 'Building Act — Code Compliance Certificates',             categoryId: 'legal',    dur: 6 },
+  { id: 'pn_9.106',  pn: 'pn_9.106',  name: 'Producer Statements',                                     categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.109',  pn: 'pn_9.109',  name: 'Dispute Resolution — Arbitration Act',                    categoryId: 'legal',    dur: 6 },
+  { id: 'pn_9.206',  pn: 'pn_9.206',  name: 'NZIA SCC 2014 Overview',                                  categoryId: 'legal',    dur: 5 },
+  { id: 'pn_1.219',  pn: 'pn_1.219',  name: 'Health and Safety at Work Act 2015',                      categoryId: 'hs',       dur: 5 },
+  { id: 'pn_1.221',  pn: 'pn_1.221',  name: 'Safety in On-Site Observation',                           categoryId: 'hs',       dur: 5 },
+  { id: 'pn_1.223',  pn: 'pn_1.223',  name: 'Seismic Considerations — EPBs',                           categoryId: 'hs',       dur: 5 },
 ];
-
 const READINESS = [
   [0,  'Not Started',        'Begin with any category to build momentum.'],
   [1,  'In Progress',        'Keep going — every module counts.'],
@@ -899,11 +731,11 @@ const READINESS = [
   [66, 'Strong Foundation',  'Major topics covered — focus on weak areas now.'],
   [90, 'Exam Ready',         'Outstanding coverage. Do a final review pass.'],
 ];
-
 const TOTAL = MODULES.length;
 
-// ── Tracker state ──────────────────────────────────────────
-
+// ─────────────────────────────────────────────────────────────
+// TRACKER STATE
+// ─────────────────────────────────────────────────────────────
 const LS_KEY = 'nzrab-tracker-v1';
 let activeCandidate = 'amelia';
 let activeFilter    = 'all';
@@ -911,27 +743,13 @@ let state = loadState();
 
 function loadState() {
   try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return blank();
-    const p = JSON.parse(raw);
-    return {
-      amelia:    { completed: new Set(p.amelia?.completed    || []) },
-      matamoana: { completed: new Set(p.matamoana?.completed || []) },
-    };
+    const p = JSON.parse(localStorage.getItem(LS_KEY));
+    if (!p) return blank();
+    return { amelia: { completed: new Set(p.amelia?.completed || []) }, matamoana: { completed: new Set(p.matamoana?.completed || []) } };
   } catch { return blank(); }
 }
-function blank() {
-  return { amelia: { completed: new Set() }, matamoana: { completed: new Set() } };
-}
-function saveState() {
-  const s = {
-    amelia:    { completed: [...state.amelia.completed]    },
-    matamoana: { completed: [...state.matamoana.completed] },
-  };
-  localStorage.setItem(LS_KEY, JSON.stringify(s));
-}
-
-// ── Derived helpers ────────────────────────────────────────
+function blank()    { return { amelia: { completed: new Set() }, matamoana: { completed: new Set() } }; }
+function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify({ amelia: { completed: [...state.amelia.completed] }, matamoana: { completed: [...state.matamoana.completed] } })); }
 
 function pct(c) { return Math.round((state[c].completed.size / TOTAL) * 100); }
 
@@ -944,155 +762,111 @@ function competencyStats(c) {
     return { ...comp, total, done: n, p: total ? Math.round((n / total) * 100) : 0 };
   });
 }
+function readinessFor(p) { let r = READINESS[0]; for (const x of READINESS) { if (p >= x[0]) r = x; } return r; }
+function weakest(c)      { return competencyStats(c).reduce((a, b) => b.p < a.p ? b : a); }
+function nextModules(c, n = 5) { const done = state[c].completed; return MODULES.filter(m => !done.has(m.id)).slice(0, n); }
 
-function readinessFor(p) {
-  let row = READINESS[0];
-  for (const r of READINESS) { if (p >= r[0]) row = r; }
-  return row;
-}
-
-function weakest(c) {
-  return competencyStats(c).reduce((a, b) => b.p < a.p ? b : a);
-}
-
-function nextModules(c, n = 5) {
-  const done = state[c].completed;
-  return MODULES.filter(m => !done.has(m.id)).slice(0, n);
-}
-
-// ── Render ─────────────────────────────────────────────────
-
-function renderAll() {
-  renderTabs();
-  renderSidebar();
-  renderFilters();
-  renderModuleList();
-}
+// ─────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────
+function renderAll() { renderTabs(); renderSidebar(); renderFilters(); renderModuleList(); }
 
 function renderTabs() {
   for (const c of ['amelia', 'matamoana']) {
-    const tab = document.querySelector(`[data-c="${c}"]`);
-    tab.className = 'tab' + (c === activeCandidate ? ' active' : '');
-    document.getElementById(`badge-${c}`).textContent = pct(c) + '%';
+    document.querySelector(`[data-c="${c}"]`).className = 'tab' + (c === activeCandidate ? ' active' : '');
+    document.getElementById(`badge-${c}`).textContent  = pct(c) + '%';
   }
 }
 
 function renderSidebar() {
-  const p = pct(activeCandidate);
-  const n = state[activeCandidate].completed.size;
+  const p = pct(activeCandidate), n = state[activeCandidate].completed.size;
   document.getElementById('pct-big').textContent     = p + '%';
   document.getElementById('pct-sub').textContent     = `${n} of ${TOTAL} modules complete`;
   document.getElementById('bar-overall').style.width = p + '%';
-
   const stats = competencyStats(activeCandidate);
   document.getElementById('comp-list').innerHTML = stats.map(s => `
     <div class="comp-item">
-      <div class="comp-row-head">
-        <span class="comp-name">${s.id}</span>
-        <span class="comp-frac">${s.done}/${s.total}</span>
-      </div>
-      <div class="comp-bar-wrap">
-        <div class="comp-bar-fill" style="width:${s.p}%;background:${s.colour}"></div>
-      </div>
-    </div>
-  `).join('');
-
+      <div class="comp-row-head"><span class="comp-name">${s.id}</span><span class="comp-frac">${s.done}/${s.total}</span></div>
+      <div class="comp-bar-wrap"><div class="comp-bar-fill" style="width:${s.p}%;background:${s.colour}"></div></div>
+    </div>`).join('');
   const [, label, desc] = readinessFor(p);
   document.getElementById('readiness-label').textContent = label;
   document.getElementById('readiness-desc').textContent  = desc;
 }
 
 function renderFilters() {
-  const done    = state[activeCandidate].completed;
-  const pending = TOTAL - done.size;
-
+  const done = state[activeCandidate].completed, pending = TOTAL - done.size;
   const chips = [
     { id: 'all',       label: 'All',       count: TOTAL,     colour: null },
     { id: 'pending',   label: 'Pending',   count: pending,   colour: null },
     { id: 'completed', label: 'Completed', count: done.size, colour: null },
-    ...CATEGORIES.map(c => ({
-      id: c.id, label: c.label,
-      count: MODULES.filter(m => m.categoryId === c.id).length,
-      colour: c.colour,
-    })),
+    ...CATEGORIES.map(c => ({ id: c.id, label: c.label, count: MODULES.filter(m => m.categoryId === c.id).length, colour: c.colour })),
   ];
-
   document.getElementById('filters').innerHTML = chips.map(ch => {
     const dot = ch.colour ? `<span class="chip-dot" style="background:${ch.colour}"></span>` : '';
-    return `<button class="chip${ch.id === activeFilter ? ' active' : ''}" onclick="setFilter('${ch.id}')">
-      ${dot}${ch.label}<span class="chip-n">${ch.count}</span>
-    </button>`;
+    return `<button class="chip${ch.id === activeFilter ? ' active' : ''}" onclick="setFilter('${ch.id}')">${dot}${ch.label}<span class="chip-n">${ch.count}</span></button>`;
   }).join('');
 }
 
 function renderModuleList() {
   const done = state[activeCandidate].completed;
-
   const filtered = MODULES.filter(m => {
     if (activeFilter === 'completed') return done.has(m.id);
     if (activeFilter === 'pending')   return !done.has(m.id);
     if (activeFilter === 'all')       return true;
     return m.categoryId === activeFilter;
   });
-
-  if (!filtered.length) {
-    document.getElementById('module-list').innerHTML =
-      `<div class="empty">No modules match this filter.</div>`;
-    return;
-  }
+  if (!filtered.length) { document.getElementById('module-list').innerHTML = `<div class="empty">No modules match this filter.</div>`; return; }
 
   const groups = new Map();
   for (const cat of CATEGORIES) groups.set(cat.id, []);
   for (const m of filtered) groups.get(m.categoryId).push(m);
 
   let i = 0;
-  const html = [...groups.entries()]
-    .filter(([, mods]) => mods.length)
-    .map(([catId, mods]) => {
-      const cat     = CATEGORIES.find(c => c.id === catId);
-      const catDone = mods.filter(m => done.has(m.id)).length;
-
-      const cards = mods.map(m => {
-        const isDone = done.has(m.id);
-        return `<div class="module-card${isDone ? ' done' : ''}"
-                     style="--delay:${i++ * 28}ms"
-                     onclick="toggleModule('${m.id}')"
-                     title="${m.name}">
-          <div class="check-ring">
-            <svg width="9" height="9" viewBox="0 0 24 24" fill="none"
-                 stroke="white" stroke-width="3.5"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20,6 9,17 4,12"/>
-            </svg>
-          </div>
-          <div class="mod-info">
-            <div class="mod-pn">${m.pn}</div>
-            <div class="mod-name">${m.name}</div>
-          </div>
-          <div class="mod-meta">
-            <span class="mod-dur">~${m.dur} min</span>
-            <span class="mod-cat-dot" style="background:${cat.colour}"></span>
-          </div>
-        </div>`;
-      }).join('');
-
-      return `<div class="module-group">
-        <div class="group-head">
-          <span class="group-dot" style="background:${cat.colour}"></span>
-          <span class="group-name">${cat.label}</span>
-          <span class="group-frac">${catDone}/${mods.length}</span>
+  const html = [...groups.entries()].filter(([, ms]) => ms.length).map(([catId, mods]) => {
+    const cat     = CATEGORIES.find(c => c.id === catId);
+    const catDone = mods.filter(m => done.has(m.id)).length;
+    const cards   = mods.map(m => {
+      const isDone     = done.has(m.id);
+      const isPlaying  = currentId === m.id && !audio.paused;
+      const isLoaded   = currentId === m.id;
+      const hasAudio   = driveReady && driveFileMap[m.id];
+      const noAudio    = driveReady && !driveFileMap[m.id];
+      const playIcon   = isPlaying ? SVG_PAUSE : SVG_PLAY;
+      const playClass  = `play-btn${isPlaying ? ' is-playing' : ''}${noAudio ? ' no-audio' : ''}`;
+      const cardClass  = `module-card${isDone ? ' done' : ''}${isLoaded ? ' now-playing' : ''}`;
+      return `<div class="${cardClass}" style="--delay:${i++ * 28}ms" onclick="toggleModule('${m.id}')" title="${m.name}">
+        <div class="check-ring">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
         </div>
-        ${cards}
+        <div class="mod-info">
+          <div class="mod-pn">${m.pn}</div>
+          <div class="mod-name">${m.name}</div>
+        </div>
+        <div class="mod-meta">
+          <span class="mod-dur">~${m.dur} min</span>
+          <button class="${playClass}" onclick="event.stopPropagation(); playModule('${m.id}')" title="${isPlaying ? 'Pause' : 'Play'}">${playIcon}</button>
+          <span class="mod-cat-dot" style="background:${cat.colour}"></span>
+        </div>
       </div>`;
     }).join('');
-
+    return `<div class="module-group">
+      <div class="group-head">
+        <span class="group-dot" style="background:${cat.colour}"></span>
+        <span class="group-name">${cat.label}</span>
+        <span class="group-frac">${catDone}/${mods.length}</span>
+      </div>
+      ${cards}
+    </div>`;
+  }).join('');
   document.getElementById('module-list').innerHTML = html;
 }
 
-// ── Actions ────────────────────────────────────────────────
-
+// ─────────────────────────────────────────────────────────────
+// ACTIONS
+// ─────────────────────────────────────────────────────────────
 function switchCandidate(c) { activeCandidate = c; renderAll(); }
-function setFilter(f) { activeFilter = f; renderFilters(); renderModuleList(); }
+function setFilter(f)       { activeFilter = f; renderFilters(); renderModuleList(); }
 
 function toggleModule(id) {
   const set = state[activeCandidate].completed;
@@ -1103,37 +877,24 @@ function toggleModule(id) {
   showToast(set.has(id) ? `Marked complete: ${m.name}` : `Unmarked: ${m.name}`);
 }
 
-// ── Toast ──────────────────────────────────────────────────
-
 let _toastTimer;
 function showToast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
+  el.textContent = msg; el.classList.add('show');
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
-// ── Weekly Summary ─────────────────────────────────────────
-
+// ─────────────────────────────────────────────────────────────
+// WEEKLY SUMMARY
+// ─────────────────────────────────────────────────────────────
 function generateSummary() {
   const name  = activeCandidate === 'amelia' ? 'Amelia' : 'Matamoana';
-  const p     = pct(activeCandidate);
-  const n     = state[activeCandidate].completed.size;
-  const stats = competencyStats(activeCandidate);
-  const weak  = weakest(activeCandidate);
-  const next5 = nextModules(activeCandidate, 5);
+  const p     = pct(activeCandidate), n = state[activeCandidate].completed.size;
+  const stats = competencyStats(activeCandidate), weak = weakest(activeCandidate), next5 = nextModules(activeCandidate, 5);
   const date  = new Date().toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric' });
-
-  function bar(p) { const f = Math.round(p / 10); return '\u2588'.repeat(f) + '\u2591'.repeat(10 - f); }
-  function rpad(s, n) { return s + ' '.repeat(Math.max(0, n - s.length)); }
-
-  const compLines = stats.map(s => `  ${rpad(s.id, 26)} ${bar(s.p)} ${String(s.p).padStart(3)}%`).join('\n');
-  const nextLines = next5.length
-    ? next5.map((m, i) => `  ${i + 1}. ${m.pn} \u2014 ${m.name}`).join('\n')
-    : '  (All modules complete!)';
-  const startWith = next5.length ? next5[0].name : 'a final review of key topics';
-
+  function bar(p) { const f = Math.round(p/10); return '\u2588'.repeat(f) + '\u2591'.repeat(10-f); }
+  function rpad(s,n) { return s + ' '.repeat(Math.max(0, n - s.length)); }
   document.getElementById('summary-pre').textContent =
 `NZRAB NPE \u2014 Weekly Summary
 Candidate: ${name} | Date: ${date}
@@ -1141,39 +902,33 @@ Candidate: ${name} | Date: ${date}
 Overall Progress: ${n}/${TOTAL} (${p}%)
 
 Competency Coverage:
-${compLines}
+${stats.map(s => `  ${rpad(s.id,26)} ${bar(s.p)} ${String(s.p).padStart(3)}%`).join('\n')}
 
 \u26a0 Weakest area: ${weak.id} (${weak.p}%)
 
 Next ${Math.min(5, next5.length)} modules to study:
-${nextLines}
+${next5.length ? next5.map((m,i) => `  ${i+1}. ${m.pn} \u2014 ${m.name}`).join('\n') : '  (All modules complete!)'}
 
 ---
-[STUDY] You are a study coach for the NZRAB NPE exam. I will give you practice note topics and you will quiz me, explain concepts, and help me identify gaps. Start with: ${startWith}`;
-
+[STUDY] You are a study coach for the NZRAB NPE exam. I will give you practice note topics and you will quiz me, explain concepts, and help me identify gaps. Start with: ${next5.length ? next5[0].name : 'a final review of key topics'}`;
   document.getElementById('overlay').classList.add('open');
 }
-
 function closeModal() { document.getElementById('overlay').classList.remove('open'); }
-
 async function copyToClipboard() {
-  try {
-    await navigator.clipboard.writeText(document.getElementById('summary-pre').textContent);
-    showToast('Copied to clipboard');
-  } catch { showToast('Copy failed — select all text and copy manually'); }
+  try { await navigator.clipboard.writeText(document.getElementById('summary-pre').textContent); showToast('Copied to clipboard'); }
+  catch { showToast('Copy failed — select all text and copy manually'); }
 }
-
-// ── Auto-save ──────────────────────────────────────────────
 
 setInterval(saveState, 60_000);
 
-// ── Init ───────────────────────────────────────────────────
-
+// ─────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────
 const _existingAuth = getAuth();
 if (_existingAuth) {
-  showApp(_existingAuth);  // already signed in — skip login screen
+  showApp(_existingAuth);
 } else {
-  initGoogleSignIn();      // show login screen, wire up GSI button
+  initGoogleSignIn();
 }
 </script>
 </body>
