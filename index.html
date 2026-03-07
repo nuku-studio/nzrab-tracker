@@ -614,6 +614,11 @@ let currentId = null;
 
 audio.addEventListener('timeupdate',     syncPlayerBar);
 audio.addEventListener('loadedmetadata', syncPlayerBar);
+audio.addEventListener('error', () => {
+  const c = audio.error;
+  showToast('Audio error ' + (c ? c.code + ': ' + c.message : 'unknown'));
+  console.error('Audio element error:', c);
+});
 audio.addEventListener('play',  () => { syncPlayerBar(); renderModuleList(); });
 audio.addEventListener('pause', () => { syncPlayerBar(); renderModuleList(); });
 audio.addEventListener('ended', () => {
@@ -688,7 +693,12 @@ async function playModule(id) {
   currentId  = id;
   audio.src  = `https://www.googleapis.com/drive/v3/files/${driveFileMap[id]}?alt=media&access_token=${driveToken}`;
   audio.load();
-  audio.play();
+  try {
+    await audio.play();
+  } catch(e) {
+    showToast('Playback error: ' + e.message);
+    console.error('Audio play error:', e);
+  }
   const bar  = document.getElementById('player-bar');
   bar.style.display = 'flex';
   const m    = MODULES.find(x => x.id === id);
