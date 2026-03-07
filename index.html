@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://accounts.google.com/gsi/client" onload="onGsiLibraryLoaded()" async defer></script>
   <style>
     :root {
       --bg:           #f5f2ec;
@@ -25,7 +24,6 @@
       --sidebar-w:    280px;
       --radius:       8px;
       --header-h:     56px;
-      --player-h:     64px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,37 +38,6 @@
       background-size: 24px 24px;
       min-height: 100vh;
     }
-
-    /* ── Login screen ──────────────────────────────────────── */
-    #login-screen {
-      position: fixed; inset: 0;
-      background-color: var(--bg);
-      background-image:
-        linear-gradient(var(--grid-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-      background-size: 24px 24px;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 500;
-    }
-    .login-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 44px 40px;
-      width: min(380px, calc(100vw - 40px));
-      text-align: center;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.09);
-      display: flex; flex-direction: column; align-items: center; gap: 14px;
-    }
-    .login-logo {
-      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
-      letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
-    }
-    .login-title { font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1.2; }
-    .login-sub   { font-size: 13.5px; color: var(--ink-dim); line-height: 1.5; max-width: 260px; }
-    .login-rule  { width: 36px; height: 2px; background: var(--border); border-radius: 1px; }
-    #gsi-button  { margin-top: 4px; }
-    .login-note  { font-size: 11px; color: var(--ink-dim); line-height: 1.6; max-width: 280px; }
 
     /* ── Header ────────────────────────────────────────────── */
     header {
@@ -105,14 +72,6 @@
     }
     .tab.active .tab-badge { background: var(--accent); }
     .header-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-
-    .user-pill {
-      display: flex; align-items: center; gap: 7px;
-      padding: 3px 10px 3px 4px; border-radius: 20px;
-      border: 1px solid var(--border); background: var(--surface);
-    }
-    .user-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); display: block; }
-    .user-name   { font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; }
 
     .btn {
       display: inline-flex; align-items: center; gap: 6px;
@@ -207,68 +166,7 @@
     .mod-dur  { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--ink-dim); }
     .mod-cat-dot { width: 7px; height: 7px; border-radius: 50%; }
 
-    /* Play button on card */
-    .play-btn {
-      width: 26px; height: 26px; border-radius: 50%;
-      border: 1px solid var(--border-dark); background: var(--surface);
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; color: var(--ink-dim);
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-    }
-    .play-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
-    .play-btn.is-playing { background: var(--accent); border-color: var(--accent); color: white; }
-    .play-btn.no-audio   { opacity: 0.35; cursor: default; }
-
     .empty { text-align: center; padding: 48px 0; color: var(--ink-dim); font-size: 14px; }
-
-    /* ── Player bar ─────────────────────────────────────────── */
-    #player-bar {
-      display: none;
-      position: fixed; bottom: 0; left: 0; right: 0;
-      height: var(--player-h);
-      background: var(--ink); color: white;
-      align-items: center; gap: 16px;
-      padding: 0 20px;
-      z-index: 150;
-      box-shadow: 0 -2px 16px rgba(0,0,0,0.20);
-    }
-
-    .pb-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
-    .pb-pn   { font-family: 'DM Mono', monospace; font-size: 9.5px; opacity: 0.55; }
-    .pb-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    .pb-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-    .pb-btn {
-      width: 32px; height: 32px; border-radius: 50%; border: none;
-      background: rgba(255,255,255,0.10); color: white; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s;
-    }
-    .pb-btn:hover { background: rgba(255,255,255,0.20); }
-    .pb-btn-main { width: 38px; height: 38px; background: white; color: var(--ink); }
-    .pb-btn-main:hover { opacity: 0.90; background: white; }
-
-    .pb-progress { display: flex; align-items: center; gap: 9px; flex: 1; max-width: 420px; }
-    .pb-time { font-family: 'DM Mono', monospace; font-size: 11px; opacity: 0.55; white-space: nowrap; min-width: 36px; }
-    .pb-time.right { text-align: right; }
-    .pb-seek {
-      flex: 1; -webkit-appearance: none; appearance: none;
-      height: 3px; border-radius: 2px;
-      background: linear-gradient(to right, rgba(255,255,255,0.7) var(--prog, 0%), rgba(255,255,255,0.18) var(--prog, 0%));
-      outline: none; cursor: pointer;
-    }
-    .pb-seek::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 13px; height: 13px;
-      border-radius: 50%; background: white; cursor: pointer;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    }
-    .pb-close {
-      width: 28px; height: 28px; border-radius: 50%; border: none;
-      background: rgba(255,255,255,0.10); color: white; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; line-height: 1; flex-shrink: 0; transition: background 0.15s;
-    }
-    .pb-close:hover { background: rgba(255,255,255,0.22); }
 
     /* ── Modal ──────────────────────────────────────────────── */
     .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.38); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; }
@@ -283,7 +181,7 @@
     #summary-pre { font-family: 'DM Mono', monospace; font-size: 11.5px; line-height: 1.75; white-space: pre-wrap; color: var(--ink); background: rgba(15,15,15,0.025); padding: 14px; border-radius: 6px; border: 1px solid var(--border); }
 
     /* ── Toast ──────────────────────────────────────────────── */
-    #toast { position: fixed; bottom: 82px; right: 22px; background: var(--ink); color: white; padding: 9px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 500; z-index: 300; opacity: 0; transform: translateY(6px); transition: opacity 0.18s, transform 0.18s; pointer-events: none; max-width: 320px; }
+    #toast { position: fixed; bottom: 22px; right: 22px; background: var(--ink); color: white; padding: 9px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 500; z-index: 300; opacity: 0; transform: translateY(6px); transition: opacity 0.18s, transform 0.18s; pointer-events: none; max-width: 320px; }
     #toast.show { opacity: 1; transform: translateY(0); }
 
     /* ── Scrollbars ─────────────────────────────────────────── */
@@ -294,20 +192,8 @@
 </head>
 <body>
 
-<!-- ── Login screen ─────────────────────────────────────── -->
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-logo">NZRAB&#8202;·&#8202;NPE</div>
-    <div class="login-title">Module Tracker</div>
-    <div class="login-sub">Sign in to access your study progress and audio library.</div>
-    <div class="login-rule"></div>
-    <div id="gsi-button"></div>
-    <div class="login-note">Access is restricted to authorised accounts.<br>Progress is stored in your browser.</div>
-  </div>
-</div>
-
 <!-- ── App ──────────────────────────────────────────────── -->
-<div id="app" style="display:none">
+<div id="app">
 
   <header>
     <span class="header-logo">NZRAB&#8202;·&#8202;NPE</span>
@@ -317,8 +203,6 @@
       <button class="tab"        data-c="matamoana" onclick="switchCandidate('matamoana')">Matamoana <span class="tab-badge" id="badge-matamoana">0%</span></button>
     </div>
     <div class="header-actions">
-      <div id="user-badge"></div>
-      <div class="header-sep"></div>
       <button class="btn" onclick="generateSummary()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         Weekly Summary
@@ -354,25 +238,6 @@
     </main>
   </div>
 
-  <!-- Player bar -->
-  <div id="player-bar">
-    <div class="pb-info">
-      <div class="pb-pn"   id="pb-pn"></div>
-      <div class="pb-name" id="pb-name"></div>
-    </div>
-    <div class="pb-controls">
-      <button class="pb-btn pb-btn-main" id="pb-playbtn" onclick="togglePlayback()" title="Play / Pause">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
-      </button>
-    </div>
-    <div class="pb-progress">
-      <span class="pb-time" id="pb-cur">0:00</span>
-      <input class="pb-seek" id="pb-seek" type="range" min="0" max="100" value="0"
-             oninput="seekTo(this.value)" style="--prog:0%">
-      <span class="pb-time right" id="pb-dur">0:00</span>
-    </div>
-    <button class="pb-close" onclick="stopPlayer()" title="Close player">&times;</button>
-  </div>
 
 </div><!-- /app -->
 
@@ -400,265 +265,6 @@
 <script>
 'use strict';
 
-// ─────────────────────────────────────────────────────────────
-// CONFIG — replace client ID after creating Google Cloud creds
-// ─────────────────────────────────────────────────────────────
-const GOOGLE_CLIENT_ID = 'REPLACE_WITH_YOUR_CLIENT_ID';
-
-// Map each person's Gmail → candidate tab (optional but recommended)
-const CANDIDATE_EMAILS = {
-  // 'amelia@gmail.com':    'amelia',
-  // 'matamoana@gmail.com': 'matamoana',
-};
-
-// Drive folder containing the MP3s (Amelia's folder — both are identical content)
-const MP3_FOLDER_ID = '1ItAlNyrqKZ6p1oWjxldOO4bFfjBGEqm8';
-
-// ─────────────────────────────────────────────────────────────
-// AUTH
-// ─────────────────────────────────────────────────────────────
-const AUTH_KEY = 'nzrab-auth-v1';
-
-function getAuth()       { try { return JSON.parse(localStorage.getItem(AUTH_KEY)); } catch { return null; } }
-function setAuth(p)      { localStorage.setItem(AUTH_KEY, JSON.stringify({ name: p.name, email: p.email, picture: p.picture, sub: p.sub })); }
-function clearAuth()     { localStorage.removeItem(AUTH_KEY); }
-function parseJwt(token) { const b = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'); return JSON.parse(atob(b)); }
-
-function onGoogleSignIn(response) {
-  const payload = parseJwt(response.credential);
-  setAuth(payload);
-  showApp(payload);
-}
-
-function showApp(auth) {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  renderUserBadge(auth);
-  const mapped = CANDIDATE_EMAILS[auth.email];
-  if (mapped) activeCandidate = mapped;
-  renderAll();
-  requestDriveToken(); // fetch MP3 file list after sign-in
-}
-
-function renderUserBadge(auth) {
-  const firstName = (auth.name || auth.email).split(' ')[0];
-  document.getElementById('user-badge').innerHTML = `
-    <div class="user-pill">
-      <img class="user-avatar" src="${auth.picture || ''}" alt="${firstName}" onerror="this.style.display='none'">
-      <span class="user-name">${firstName}</span>
-    </div>
-    <button class="btn btn-ghost" onclick="signOut()" title="Sign out">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      Sign out
-    </button>`;
-}
-
-function signOut() {
-  const auth = getAuth();
-  if (auth?.email && typeof google !== 'undefined') {
-    google.accounts.id.revoke(auth.email, () => {});
-    google.accounts.id.disableAutoSelect();
-  }
-  stopPlayer();
-  clearAuth();
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  initGoogleSignIn();
-}
-
-// ─────────────────────────────────────────────────────────────
-// GSI + DRIVE TOKEN
-// ─────────────────────────────────────────────────────────────
-let _gsiReady        = false;
-let driveTokenClient = null;
-let driveToken       = null;
-
-function initGoogleSignIn() {
-  if (typeof google === 'undefined' || !google.accounts) { _gsiReady = true; return; }
-
-  google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onGoogleSignIn, ux_mode: 'popup' });
-  google.accounts.id.renderButton(document.getElementById('gsi-button'),
-    { theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular', width: 280 });
-  google.accounts.id.prompt();
-
-  if (GOOGLE_CLIENT_ID !== 'REPLACE_WITH_YOUR_CLIENT_ID') {
-    driveTokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: GOOGLE_CLIENT_ID,
-      scope: 'https://www.googleapis.com/auth/drive.readonly',
-      callback: onDriveToken,
-    });
-  }
-}
-
-function onGsiLibraryLoaded() { if (_gsiReady) initGoogleSignIn(); }
-
-function requestDriveToken() {
-  if (!driveTokenClient) return;
-  driveTokenClient.requestAccessToken({ prompt: '' }); // silent if already granted
-}
-
-async function onDriveToken(resp) {
-  if (resp.error) { console.warn('Drive token error:', resp.error); return; }
-  driveToken = resp.access_token;
-  await loadDriveFiles();
-}
-
-// ─────────────────────────────────────────────────────────────
-// DRIVE FILE MAP
-// ─────────────────────────────────────────────────────────────
-let driveFileMap  = {}; // moduleId -> Drive fileId
-let driveReady    = false;
-
-async function loadDriveFiles() {
-  try {
-    const files = await fetchAllFiles(MP3_FOLDER_ID);
-    driveFileMap = buildFileMap(files);
-    driveReady   = true;
-    renderModuleList(); // refresh play buttons now that IDs are known
-  } catch (e) {
-    console.warn('Drive file load failed:', e);
-  }
-}
-
-async function fetchAllFiles(folderId) {
-  const all = [];
-  let pageToken = '';
-  do {
-    const url = new URL('https://www.googleapis.com/drive/v3/files');
-    url.searchParams.set('q',         `'${folderId}' in parents and trashed=false`);
-    url.searchParams.set('fields',    'nextPageToken,files(id,name)');
-    url.searchParams.set('pageSize',  '200');
-    if (pageToken) url.searchParams.set('pageToken', pageToken);
-    const resp = await fetch(url.toString(), { headers: { Authorization: `Bearer ${driveToken}` } });
-    const data = await resp.json();
-    all.push(...(data.files || []));
-    pageToken = data.nextPageToken || '';
-  } while (pageToken);
-  return all;
-}
-
-function buildFileMap(files) {
-  const map = {};
-  for (const m of MODULES) {
-    const f = findFile(files, m.id);
-    if (f) map[m.id] = f.id;
-  }
-  return map;
-}
-
-function findFile(files, moduleId) {
-  if (moduleId === 'ipenz22') return files.find(f => f.name.toLowerCase().includes('pn22'));
-  const match = moduleId.match(/pn[_-](\d+\.\d+\w*)/i);
-  if (!match) return null;
-  const num = match[1]; // e.g. '1.227', '3.101r'
-  return files.find(f => {
-    const n = f.name.toLowerCase();
-    return n.includes(`pn_${num}`) || n.includes(`pn-${num}`);
-  });
-}
-
-// ─────────────────────────────────────────────────────────────
-// AUDIO PLAYER
-// ─────────────────────────────────────────────────────────────
-const audio    = new Audio();
-let   currentId = null;
-
-audio.addEventListener('timeupdate', syncPlayerBar);
-audio.addEventListener('ended', () => { currentId = null; renderModuleList(); syncPlayerBar(); });
-audio.addEventListener('error',  () => { showToast('Playback error — try again'); currentId = null; renderModuleList(); });
-
-function playModule(moduleId) {
-  // Toggle pause/resume for same module
-  if (currentId === moduleId) {
-    audio.paused ? audio.play() : audio.pause();
-    renderModuleList();
-    syncPlayerBar();
-    return;
-  }
-
-  const fileId = driveFileMap[moduleId];
-  if (!fileId) {
-    showToast(driveReady ? 'Audio not found for this module' : 'Audio loading — try again shortly');
-    return;
-  }
-  if (!driveToken) { showToast('Audio access not yet authorised'); return; }
-
-  audio.pause();
-  audio.src = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&access_token=${driveToken}`;
-  currentId  = moduleId;
-
-  audio.play().catch(err => {
-    if (err.name !== 'AbortError') showToast('Click play to start audio');
-  });
-
-  // Show / update player bar
-  const m = MODULES.find(m => m.id === moduleId);
-  document.getElementById('pb-pn').textContent   = m.pn;
-  document.getElementById('pb-name').textContent = m.name;
-  document.getElementById('player-bar').style.display = 'flex';
-  document.getElementById('main-area').style.paddingBottom = '80px';
-
-  renderModuleList();
-  syncPlayerBar();
-}
-
-function togglePlayback() {
-  if (!currentId) return;
-  audio.paused ? audio.play() : audio.pause();
-  renderModuleList();
-  syncPlayerBar();
-}
-
-function seekTo(val) {
-  if (audio.duration) {
-    audio.currentTime = (val / 100) * audio.duration;
-    syncPlayerBar();
-  }
-}
-
-function stopPlayer() {
-  audio.pause();
-  audio.src = '';
-  currentId  = null;
-  document.getElementById('player-bar').style.display = 'none';
-  document.getElementById('main-area').style.paddingBottom = '';
-  renderModuleList();
-}
-
-function syncPlayerBar() {
-  const dur  = audio.duration || 0;
-  const cur  = audio.currentTime || 0;
-  const prog = dur > 0 ? (cur / dur) * 100 : 0;
-
-  const seekEl = document.getElementById('pb-seek');
-  if (seekEl) {
-    seekEl.value = prog;
-    seekEl.style.setProperty('--prog', prog + '%');
-  }
-
-  const curEl = document.getElementById('pb-cur');
-  const durEl = document.getElementById('pb-dur');
-  if (curEl) curEl.textContent = fmtTime(cur);
-  if (durEl) durEl.textContent = fmtTime(dur);
-
-  const btn = document.getElementById('pb-playbtn');
-  if (btn) {
-    btn.innerHTML = audio.paused
-      ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>`
-      : `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
-  }
-}
-
-function fmtTime(s) {
-  if (!s || isNaN(s)) return '0:00';
-  const m = Math.floor(s / 60);
-  const sec = Math.floor(s % 60).toString().padStart(2, '0');
-  return `${m}:${sec}`;
-}
-
-// Play icon SVGs
-const SVG_PLAY  = `<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>`;
-const SVG_PAUSE = `<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
 
 // ─────────────────────────────────────────────────────────────
 // DATA
@@ -827,15 +433,8 @@ function renderModuleList() {
     const cat     = CATEGORIES.find(c => c.id === catId);
     const catDone = mods.filter(m => done.has(m.id)).length;
     const cards   = mods.map(m => {
-      const isDone     = done.has(m.id);
-      const isPlaying  = currentId === m.id && !audio.paused;
-      const isLoaded   = currentId === m.id;
-      const hasAudio   = driveReady && driveFileMap[m.id];
-      const noAudio    = driveReady && !driveFileMap[m.id];
-      const playIcon   = isPlaying ? SVG_PAUSE : SVG_PLAY;
-      const playClass  = `play-btn${isPlaying ? ' is-playing' : ''}${noAudio ? ' no-audio' : ''}`;
-      const cardClass  = `module-card${isDone ? ' done' : ''}${isLoaded ? ' now-playing' : ''}`;
-      return `<div class="${cardClass}" style="--delay:${i++ * 28}ms" onclick="toggleModule('${m.id}')" title="${m.name}">
+      const isDone = done.has(m.id);
+      return `<div class="module-card${isDone ? ' done' : ''}" style="--delay:${i++ * 28}ms" onclick="toggleModule('${m.id}')" title="${m.name}">
         <div class="check-ring">
           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
         </div>
@@ -845,7 +444,6 @@ function renderModuleList() {
         </div>
         <div class="mod-meta">
           <span class="mod-dur">~${m.dur} min</span>
-          <button class="${playClass}" onclick="event.stopPropagation(); playModule('${m.id}')" title="${isPlaying ? 'Pause' : 'Play'}">${playIcon}</button>
           <span class="mod-cat-dot" style="background:${cat.colour}"></span>
         </div>
       </div>`;
@@ -924,12 +522,7 @@ setInterval(saveState, 60_000);
 // ─────────────────────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────────────────────
-const _existingAuth = getAuth();
-if (_existingAuth) {
-  showApp(_existingAuth);
-} else {
-  initGoogleSignIn();
-}
+renderAll();
 </script>
 </body>
 </html>
