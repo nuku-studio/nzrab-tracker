@@ -675,6 +675,9 @@ async function loadDriveFiles() {
     if (found) driveFileMap[m.id] = found.id;
   }
   driveReady = true;
+  const unmatched = MODULES.filter(m => !driveFileMap[m.id]).map(m => m.id);
+  console.log('Drive files:', files.map(f => f.name));
+  console.log('Unmatched modules:', unmatched);
 }
 
 function findFile(moduleId, files) {
