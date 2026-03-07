@@ -704,8 +704,11 @@ async function playModule(id) {
       `https://www.googleapis.com/drive/v3/files/${driveFileMap[id]}?alt=media`,
       { headers: { Authorization: `Bearer ${driveToken}` } }
     );
+    console.log('Drive fetch:', resp.status, resp.headers.get('content-type'));
     if (!resp.ok) throw new Error(`Drive returned HTTP ${resp.status}`);
-    const blob = await resp.blob();
+    const buf  = await resp.arrayBuffer();
+    const blob = new Blob([buf], { type: 'audio/mpeg' });
+    console.log('Blob size:', blob.size);
     if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
     audio._blobUrl = URL.createObjectURL(blob);
     audio.src = audio._blobUrl;
