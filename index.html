@@ -675,19 +675,20 @@ async function loadDriveFiles() {
     if (found) driveFileMap[m.id] = found.id;
   }
   driveReady = true;
-  const unmatched = MODULES.filter(m => !driveFileMap[m.id]).map(m => m.id);
-  console.log('Drive files:', files.map(f => f.name));
-  console.log('Unmatched modules:', unmatched);
 }
 
 function findFile(moduleId, files) {
-  const re     = /pn[_\-](\d+\.\d+\w*)/i;
-  const modPn  = moduleId === 'ipenz22' ? null : moduleId.replace(/^pn_/, '');
+  const re    = /pn[_\-](\d+\.\d+[a-zA-Z]*)/i;
+  const modPn = moduleId === 'ipenz22' ? null : moduleId.replace(/^pn_/, '');
   return files.find(f => {
     const name = f.name.toLowerCase();
     if (moduleId === 'ipenz22') return name.includes('pn22') || (name.includes('ipenz') && name.includes('22'));
     const match = name.match(re);
-    return match && match[1].toLowerCase() === modPn.toLowerCase();
+    if (!match) return false;
+    const captured = match[1].toLowerCase();
+    const target   = modPn.toLowerCase();
+    return captured === target ||
+           (captured.startsWith(target) && /^[a-z]+$/.test(captured.slice(target.length)));
   }) || null;
 }
 
