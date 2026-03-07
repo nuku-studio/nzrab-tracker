@@ -322,6 +322,7 @@
   </div>
 </div>
 
+<audio id="audio-player" preload="auto" style="display:none"></audio>
 <div id="toast"></div>
 
 <!-- ── Script ────────────────────────────────────────────── -->
@@ -609,7 +610,7 @@ const SVG_PAUSE   = `<svg width="13" height="13" viewBox="0 0 24 24" fill="curre
 const SVG_PLAY_LG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>`;
 const SVG_PAUSE_LG= `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
 
-const audio = new Audio();
+const audio = document.getElementById('audio-player');
 let currentId = null;
 
 audio.addEventListener('timeupdate',     syncPlayerBar);
@@ -704,11 +705,9 @@ async function playModule(id) {
       `https://www.googleapis.com/drive/v3/files/${driveFileMap[id]}?alt=media`,
       { headers: { Authorization: `Bearer ${driveToken}` } }
     );
-    console.log('Drive fetch:', resp.status, resp.headers.get('content-type'));
     if (!resp.ok) throw new Error(`Drive returned HTTP ${resp.status}`);
     const buf  = await resp.arrayBuffer();
     const blob = new Blob([buf], { type: 'audio/mpeg' });
-    console.log('Blob size:', blob.size);
     if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
     audio._blobUrl = URL.createObjectURL(blob);
     audio.src = audio._blobUrl;
