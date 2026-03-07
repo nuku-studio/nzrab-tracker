@@ -690,20 +690,35 @@ function findFile(moduleId, files) {
 async function playModule(id) {
   if (!driveFileMap[id]) return;
   if (currentId === id) { togglePlayback(); return; }
-  currentId  = id;
-  audio.src  = `https://www.googleapis.com/drive/v3/files/${driveFileMap[id]}?alt=media&access_token=${driveToken}`;
-  try {
-    await audio.play();
-  } catch(e) {
-    showToast('Playback error: ' + e.message);
-    console.error('Audio play error:', e);
-  }
-  const bar  = document.getElementById('player-bar');
+  currentId = id;
+
+  const m   = MODULES.find(x => x.id === id);
+  const bar = document.getElementById('player-bar');
   bar.style.display = 'flex';
-  const m    = MODULES.find(x => x.id === id);
   document.getElementById('pb-pn').textContent   = m.pn;
-  document.getElementById('pb-name').textContent = m.name;
+  document.getElementById('pb-name').textContent = 'Loading…';
   renderModuleList();
+
+  try {
+    const resp = await fetch(
+      `https://www.googleapis.com/drive/v3/files/${driveFileMap[id]}?alt=media`,
+      { headers: { Authorization: `Bearer ${driveToken}` } }
+    );
+    if (!resp.ok) throw new Error(`Drive returned HTTP ${resp.status}`);
+    const blob = await resp.blob();
+    if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
+    audio._blobUrl = URL.createObjectURL(blob);
+    audio.src = audio._blobUrl;
+    document.getElementById('pb-name').textContent = m.name;
+    await audio.play();
+    renderModuleList();
+  } catch(e) {
+    showToast('Error: ' + e.message);
+    console.error('playModule error:', e);
+    bar.style.display = 'none';
+    currentId = null;
+    renderModuleList();
+  }
 }
 
 function togglePlayback() {
@@ -716,6 +731,7 @@ function seekTo(val) {
 
 function stopPlayer() {
   audio.pause();
+  if (audio._blobUrl) { URL.revokeObjectURL(audio._blobUrl); audio._blobUrl = null; }
   audio.src = '';
   currentId = null;
   document.getElementById('player-bar').style.display = 'none';
