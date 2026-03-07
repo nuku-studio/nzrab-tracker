@@ -692,7 +692,6 @@ async function playModule(id) {
   if (currentId === id) { togglePlayback(); return; }
   currentId  = id;
   audio.src  = `https://www.googleapis.com/drive/v3/files/${driveFileMap[id]}?alt=media&access_token=${driveToken}`;
-  audio.load();
   try {
     await audio.play();
   } catch(e) {
