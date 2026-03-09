@@ -398,6 +398,130 @@ const MODULES = [
   { id: 'pn_1.219',  pn: 'pn_1.219',  name: 'Health and Safety at Work Act 2015',                      categoryId: 'hs',       dur: 5 },
   { id: 'pn_1.221',  pn: 'pn_1.221',  name: 'Safety in On-Site Observation',                           categoryId: 'hs',       dur: 5 },
   { id: 'pn_1.223',  pn: 'pn_1.223',  name: 'Seismic Considerations — EPBs',                           categoryId: 'hs',       dur: 5 },
+  // ── Administration (new) ──────────────────────────────────────────────────
+  { id: 'pn_1.202',  pn: 'pn_1.202',  name: 'Liability Issues: A Cautionary Tale',                     categoryId: 'admin',    dur: 6 },
+  { id: 'pn_1.206',  pn: 'pn_1.206',  name: 'Consumer Guarantees Act 1993',                            categoryId: 'admin',    dur: 6 },
+  { id: 'pn_1.211',  pn: 'pn_1.211',  name: 'Duty of Care re Estimates & Programming',                 categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.212',  pn: 'pn_1.212',  name: 'Private Jobs & Liability',                                categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.213',  pn: 'pn_1.213',  name: "Professional Indemnity Insurance — Dos & Don'ts",         categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.214',  pn: 'pn_1.214',  name: 'Dealing with a Legal Person',                             categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.215',  pn: 'pn_1.215',  name: 'PII Risks in Client-Generated Agreements',                categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.216',  pn: 'pn_1.216',  name: 'When Your Client Requests Increased PI Insurance',        categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.218',  pn: 'pn_1.218',  name: 'Signing Documents',                                       categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.226',  pn: 'pn_1.226',  name: 'Electronic Signatures',                                   categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.301',  pn: 'pn_1.301',  name: 'Forms of Practice — Sole Practitioner',                   categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.302',  pn: 'pn_1.302',  name: 'Forms of Practice — Partnerships',                        categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.304',  pn: 'pn_1.304',  name: 'Valuing or Selling a Practice',                           categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.305',  pn: 'pn_1.305',  name: 'Employment Agreements',                                   categoryId: 'admin',    dur: 4 },
+  { id: 'pn_1.306',  pn: 'pn_1.306',  name: 'Independent Contractor Agreements',                       categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.307',  pn: 'pn_1.307',  name: 'Strategic Review of Your Practice',                       categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.308',  pn: 'pn_1.308',  name: 'How to Complete a Business Plan',                         categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.309',  pn: 'pn_1.309',  name: 'Dealing with Redundancy',                                 categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.310',  pn: 'pn_1.310',  name: 'Email Policy',                                            categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.311',  pn: 'pn_1.311',  name: 'Managing Creative People',                                categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.312',  pn: 'pn_1.312',  name: 'Partners Agreements',                                     categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.313',  pn: 'pn_1.313',  name: 'Partners Agreements — Financial Considerations',          categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.314',  pn: 'pn_1.314',  name: 'Partners Agreements — Retirement Provisions',             categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.315',  pn: 'pn_1.315',  name: 'Staff Performance',                                       categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.316',  pn: 'pn_1.316',  name: 'Setting Up a Limited Liability Company',                  categoryId: 'admin',    dur: 6 },
+  { id: 'pn_1.318',  pn: 'pn_1.318',  name: 'Covid-19 Employment Issues',                              categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.401',  pn: 'pn_1.401',  name: 'Car Operating Costs',                                     categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.402',  pn: 'pn_1.402',  name: 'Fringe Benefit Tax — Motor Vehicles',                     categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.403',  pn: 'pn_1.403',  name: 'Preventing Insolvency in the Practice',                   categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.404',  pn: 'pn_1.404',  name: 'Dealing with an Insolvent Practice',                      categoryId: 'admin',    dur: 5 },
+  { id: 'pn_1.405',  pn: 'pn_1.405',  name: 'Profit and Profitability',                                categoryId: 'admin',    dur: 5 },
+  // ── KO Practice Notes ────────────────────────────────────────────────────
+  { id: 'ko_pn001',  pn: 'KO PN001',  name: 'KO Practice Note PN001',                                  categoryId: 'admin',    dur: 5 },
+  { id: 'ko_pn002',  pn: 'KO PN002',  name: 'KO Practice Note PN002',                                  categoryId: 'admin',    dur: 6 },
+  // ── Documentation (new) ──────────────────────────────────────────────────
+  { id: 'pn_6.103',  pn: 'pn_6.103',  name: 'Architectural Archives',                                  categoryId: 'docs',     dur: 5 },
+  { id: 'pn_6.106',  pn: 'pn_6.106',  name: 'Digital Archiving',                                       categoryId: 'docs',     dur: 6 },
+  { id: 'pn_6.107',  pn: 'pn_6.107',  name: 'Backup, Disaster Recovery & Data Corruption',             categoryId: 'docs',     dur: 5 },
+  { id: 'pn_9.303',  pn: 'pn_9.303',  name: 'Principal Supply Items',                                  categoryId: 'docs',     dur: 5 },
+  { id: 'pn_9.304',  pn: 'pn_9.304',  name: 'Separate Contractors',                                    categoryId: 'docs',     dur: 5 },
+  { id: 'pn_9.305',  pn: 'pn_9.305',  name: 'Nominated Subcontractors',                                categoryId: 'docs',     dur: 5 },
+  // ── Contract Administration (new) ────────────────────────────────────────
+  { id: 'pn_3.101',   pn: 'pn_3.101',   name: 'Pro-forma Disengagement Letter (AAS)',                  categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.102',   pn: 'pn_3.102',   name: 'Setting Up Another Project-Specific Agreement',        categoryId: 'contract', dur: 4 },
+  { id: 'pn_3.104',   pn: 'pn_3.104',   name: 'Novation Contracts',                                   categoryId: 'contract', dur: 6 },
+  { id: 'pn_3.105',   pn: 'pn_3.105',   name: 'Joint Ventures',                                       categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.108',   pn: 'pn_3.108',   name: "Client's Project Management",                          categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.110',   pn: 'pn_3.110',   name: 'Use of NZIA AAS SF 2011',                              categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.112',   pn: 'pn_3.112',   name: 'Resigning Architectural Commissions',                  categoryId: 'contract', dur: 6 },
+  { id: 'pn_3.113',   pn: 'pn_3.113',   name: 'Fast Track Projects',                                  categoryId: 'contract', dur: 6 },
+  { id: 'pn_3.114',   pn: 'pn_3.114',   name: 'Working Internationally',                              categoryId: 'contract', dur: 6 },
+  { id: 'pn_3.116',   pn: 'pn_3.116',   name: "Architects' Services for Office Tenancy Work",         categoryId: 'contract', dur: 6 },
+  { id: 'pn_3.118',   pn: 'pn_3.118',   name: 'Weathertightness Remediation Clause',                  categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.119',   pn: 'pn_3.119',   name: 'Expert Witnessing',                                    categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.120',   pn: 'pn_3.120',   name: 'NZIA AAS 2011 and AAS SF 2011',                        categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.121',   pn: 'pn_3.121',   name: 'Accepting a Commission for Earthquake Remediation',    categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.122',   pn: 'pn_3.122',   name: 'MOE Contractor and Continuity Deed',                   categoryId: 'contract', dur: 4 },
+  { id: 'pn_3.123',   pn: 'pn_3.123',   name: 'Insurance Valuations for Homeowners',                  categoryId: 'contract', dur: 4 },
+  { id: 'pn_3.124',   pn: 'pn_3.124',   name: 'NZIA AAS 2013 and AAS SF 2013',                        categoryId: 'contract', dur: 6 },
+  { id: 'pn_3.125',   pn: 'pn_3.125',   name: 'Remediation Design for Leaky Buildings',               categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.126',   pn: 'pn_3.126',   name: 'AAS Small Projects Agreement',                         categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.127',   pn: 'pn_3.127',   name: 'MOE Contractor and Consultant Continuity Deed',        categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.201r',  pn: 'pn_3.201r',  name: 'Control of Time & Cost',                               categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.202',   pn: 'pn_3.202',   name: 'Bonds & Retentions on Fees',                           categoryId: 'contract', dur: 4 },
+  { id: 'pn_3.203',   pn: 'pn_3.203',   name: "Architects' Fees and GST",                             categoryId: 'contract', dur: 4 },
+  { id: 'pn_3.207',   pn: 'pn_3.207',   name: 'Control of Time & Costs in Small Practice',            categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.208',   pn: 'pn_3.208',   name: 'Cost Recovery for Production of Digital Data',         categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.209',   pn: 'pn_3.209',   name: 'Dangers of Fee Cutting',                               categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.210',   pn: 'pn_3.210',   name: 'Change in GST from 12.5% to 15%',                      categoryId: 'contract', dur: 5 },
+  { id: 'pn_3.212',   pn: 'pn_3.212',   name: 'Getting Paid: Managing Debtors',                       categoryId: 'contract', dur: 5 },
+  { id: 'pn_4.110',   pn: 'pn_4.110',   name: 'Procurement',                                          categoryId: 'contract', dur: 5 },
+  { id: 'pn_4.205',   pn: 'pn_4.205',   name: 'Contractor in Receivership',                           categoryId: 'contract', dur: 6 },
+  { id: 'pn_4.206',   pn: 'pn_4.206',   name: 'Contractor Design & Shop Drawings',                    categoryId: 'contract', dur: 6 },
+  { id: 'pn_4.301',   pn: 'pn_4.301',   name: 'Making Difficult Decisions',                           categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.501',   pn: 'pn_9.501',   name: 'Construction Contracts Act',                           categoryId: 'contract', dur: 4 },
+  { id: 'pn_9.502',   pn: 'pn_9.502',   name: 'Discrepancies in Schedules of Quantities',             categoryId: 'contract', dur: 4 },
+  { id: 'pn_9.505',   pn: 'pn_9.505',   name: 'Monetary Allowances',                                  categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.506',   pn: 'pn_9.506',   name: 'Deposits',                                             categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.507',   pn: 'pn_9.507',   name: 'Payment & Security for Off-Site Materials',            categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.508',   pn: 'pn_9.508',   name: 'NZIA SCC Payment Schedules 2018',                      categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.509',   pn: 'pn_9.509',   name: 'Tax Invoices & Payment Certificates',                  categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.510',   pn: 'pn_9.510',   name: 'Contingency Sum',                                      categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.511',   pn: 'pn_9.511',   name: 'Liquidated Damages',                                   categoryId: 'contract', dur: 7 },
+  { id: 'pn_9.512',   pn: 'pn_9.512',   name: 'Retentions',                                           categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.513',   pn: 'pn_9.513',   name: 'Contract Procedures — NZIA SCC',                       categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.514',   pn: 'pn_9.514',   name: 'Retentions Regime',                                    categoryId: 'contract', dur: 6 },
+  { id: 'pn_9.602',   pn: 'pn_9.602',   name: 'Authority to Decide Practical Completion',             categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.603',   pn: 'pn_9.603',   name: 'PC and Defects Liability Certificates',                categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.604',   pn: 'pn_9.604',   name: 'Extension of Time',                                    categoryId: 'contract', dur: 4 },
+  { id: 'pn_9.605',   pn: 'pn_9.605',   name: 'Suspending Work / Ending Contract',                    categoryId: 'contract', dur: 5 },
+  { id: 'pn_9.607',   pn: 'pn_9.607',   name: 'As Soon as Practicable',                               categoryId: 'contract', dur: 4 },
+  // ── Legal & Financial (new) ───────────────────────────────────────────────
+  { id: 'pn_7.104',   pn: 'pn_7.104',   name: 'Archaeological Sites',                                 categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.103',   pn: 'pn_9.103',   name: 'Building Act — Alterations',                           categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.104',   pn: 'pn_9.104',   name: 'Building Act — Change of Use',                         categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.105',   pn: 'pn_9.105',   name: 'Building Act — Compliance Schedules & IQPs',           categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.107',   pn: 'pn_9.107',   name: 'Reasonably Practicable',                               categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.110',   pn: 'pn_9.110',   name: 'Weathertight Homes Resolution Service Act',            categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.111',   pn: 'pn_9.111',   name: 'Hazardous Substances & New Organisms Act',             categoryId: 'legal',    dur: 6 },
+  { id: 'pn_9.112',   pn: 'pn_9.112',   name: 'Restricted Building Work',                             categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.113',   pn: 'pn_9.113',   name: 'Building Amendment Act 2013',                          categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.201',   pn: 'pn_9.201',   name: 'NZIA Forms of Contract — Use',                         categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.202',   pn: 'pn_9.202',   name: 'NZIA Forms of Contract — Options',                     categoryId: 'legal',    dur: 6 },
+  { id: 'pn_9.203',   pn: 'pn_9.203',   name: 'NZIA SCC 2009 Overview',                               categoryId: 'legal',    dur: 6 },
+  { id: 'pn_9.204',   pn: 'pn_9.204',   name: 'NZIA SCC-SF 2008 Overview',                            categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.205',   pn: 'pn_9.205',   name: 'NZIA SCC 2011 and SCC SF 2011 Overview',               categoryId: 'legal',    dur: 6 },
+  { id: 'pn_9.207',   pn: 'pn_9.207',   name: 'Guaranteed Maximum Price Contracts',                   categoryId: 'legal',    dur: 6 },
+  { id: 'pn_9.208',   pn: 'pn_9.208',   name: 'Cost Reimbursement Contracts',                         categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.210',   pn: 'pn_9.210',   name: 'Warranties and Guarantees',                            categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.211',   pn: 'pn_9.211',   name: 'Labour Only Contracts',                                categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.212',   pn: 'pn_9.212',   name: 'MWH Mainzeal Vero Agreements',                         categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.214',   pn: 'pn_9.214',   name: 'Arrow Southern Response (AMI Insurance) Agreements',  categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.215',   pn: 'pn_9.215',   name: 'NZIA Standard Construction Contracts',                 categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.401',   pn: 'pn_9.401',   name: 'NZIA SCC Schedules',                                   categoryId: 'legal',    dur: 6 },
+  { id: 'pn_9.404',   pn: 'pn_9.404',   name: "Contractor's Performance Bond",                        categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.408',   pn: 'pn_9.408',   name: "PI Insurance for Contractor's Design",                 categoryId: 'legal',    dur: 5 },
+  { id: 'pn_9.409',   pn: 'pn_9.409',   name: 'Reservation of Title in Contract',                     categoryId: 'legal',    dur: 6 },
+  { id: 'pn_9.410',   pn: 'pn_9.410',   name: 'Construction Insurances',                              categoryId: 'legal',    dur: 5 },
+  // ── Health & Safety (new) ────────────────────────────────────────────────
+  { id: 'pn_1.220',  pn: 'pn_1.220',  name: 'H&S Engagement, Rep and Participation',                  categoryId: 'hs',       dur: 5 },
+  { id: 'pn_1.222',  pn: 'pn_1.222',  name: 'Wellbeing and Mental Health',                            categoryId: 'hs',       dur: 6 },
+  { id: 'pn_1.224',  pn: 'pn_1.224',  name: 'Working with Asbestos',                                  categoryId: 'hs',       dur: 5 },
+  { id: 'pn_1.225',  pn: 'pn_1.225',  name: 'Working with Hazardous Substances',                      categoryId: 'hs',       dur: 4 },
 ];
 const READINESS = [
   [0,  'Not Started',        'Begin with any category to build momentum.'],
@@ -678,17 +802,31 @@ async function loadDriveFiles() {
 }
 
 function findFile(moduleId, files) {
-  const re    = /pn[_\-](\d+\.\d+[a-zA-Z]*)/i;
-  const modPn = moduleId === 'ipenz22' ? null : moduleId.replace(/^pn_/, '');
+  const re = /pn[_\-](\d+\.\d+[a-zA-Z]*)/i;
+
+  // Special cases
+  if (moduleId === 'ipenz22')
+    return files.find(f => f.name.toLowerCase().includes('pn22')) || null;
+  if (moduleId === 'ko_pn001')
+    return files.find(f => { const n = f.name.toLowerCase(); return n.includes('ko') && n.includes('pn001'); }) || null;
+  if (moduleId === 'ko_pn002')
+    return files.find(f => { const n = f.name.toLowerCase(); return n.includes('ko') && n.includes('pn002'); }) || null;
+
+  const target = moduleId.replace(/^pn_/, '').toLowerCase();
+
+  // Pass 1: exact match
+  let found = files.find(f => {
+    const m = f.name.toLowerCase().match(re);
+    return m && m[1].toLowerCase() === target;
+  });
+  if (found) return found;
+
+  // Pass 2: prefix match for version-suffixed files (e.g. pn_1.101u)
   return files.find(f => {
-    const name = f.name.toLowerCase();
-    if (moduleId === 'ipenz22') return name.includes('pn22') || (name.includes('ipenz') && name.includes('22'));
-    const match = name.match(re);
-    if (!match) return false;
-    const captured = match[1].toLowerCase();
-    const target   = modPn.toLowerCase();
-    return captured === target ||
-           (captured.startsWith(target) && /^[a-z]+$/.test(captured.slice(target.length)));
+    const m = f.name.toLowerCase().match(re);
+    if (!m) return false;
+    const cap = m[1].toLowerCase();
+    return cap.startsWith(target) && /^[a-z]+$/.test(cap.slice(target.length));
   }) || null;
 }
 
