@@ -236,8 +236,8 @@
     <span class="header-logo">NZRAB&#8202;·&#8202;NPE</span>
     <div class="header-sep"></div>
     <div class="tabs" id="tabs">
-      <button class="tab active" data-c="amelia"    onclick="switchCandidate('amelia')">Amelia    <span class="tab-badge" id="badge-amelia">0%</span></button>
-      <button class="tab"        data-c="matamoana" onclick="switchCandidate('matamoana')">Matamoana <span class="tab-badge" id="badge-matamoana">0%</span></button>
+      <button class="tab active" data-c="candidate_1" onclick="switchCandidate('candidate_1')">Candidate 1 <span class="tab-badge" id="badge-candidate_1">0%</span></button>
+      <button class="tab"        data-c="candidate_2" onclick="switchCandidate('candidate_2')">Candidate 2 <span class="tab-badge" id="badge-candidate_2">0%</span></button>
     </div>
     <div class="header-actions">
       <button class="btn" id="btn-audio" onclick="connectAudio()">
@@ -333,7 +333,7 @@
 // CONFIG
 // ─────────────────────────────────────────────────────────────
 const GOOGLE_CLIENT_ID = '9682961082-a9uj9n09th1rfo4r2c28cgo27hiohbqi.apps.googleusercontent.com';
-const MP3_FOLDER_ID    = '1ItAlNyrqKZ6p1oWjxldOO4bFfjBGEqm8'; // Amelia's MP3 folder
+const MP3_FOLDER_ID    = '1ItAlNyrqKZ6p1oWjxldOO4bFfjBGEqm8';
 
 // ─────────────────────────────────────────────────────────────
 // DATA
@@ -536,7 +536,7 @@ const TOTAL = MODULES.length;
 // TRACKER STATE
 // ─────────────────────────────────────────────────────────────
 const LS_KEY = 'nzrab-tracker-v1';
-let activeCandidate = 'amelia';
+let activeCandidate = 'candidate_1';
 let activeFilter    = 'all';
 let state = loadState();
 
@@ -544,11 +544,11 @@ function loadState() {
   try {
     const p = JSON.parse(localStorage.getItem(LS_KEY));
     if (!p) return blank();
-    return { amelia: { completed: new Set(p.amelia?.completed || []) }, matamoana: { completed: new Set(p.matamoana?.completed || []) } };
+    return { candidate_1: { completed: new Set(p.candidate_1?.completed || []) }, candidate_2: { completed: new Set(p.candidate_2?.completed || []) } };
   } catch { return blank(); }
 }
-function blank()    { return { amelia: { completed: new Set() }, matamoana: { completed: new Set() } }; }
-function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify({ amelia: { completed: [...state.amelia.completed] }, matamoana: { completed: [...state.matamoana.completed] } })); }
+function blank()    { return { candidate_1: { completed: new Set() }, candidate_2: { completed: new Set() } }; }
+function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify({ candidate_1: { completed: [...state.candidate_1.completed] }, candidate_2: { completed: [...state.candidate_2.completed] } })); }
 
 function pct(c) { return Math.round((state[c].completed.size / TOTAL) * 100); }
 
@@ -571,7 +571,7 @@ function nextModules(c, n = 5) { const done = state[c].completed; return MODULES
 function renderAll() { renderTabs(); renderSidebar(); renderFilters(); renderModuleList(); }
 
 function renderTabs() {
-  for (const c of ['amelia', 'matamoana']) {
+  for (const c of ['candidate_1', 'candidate_2']) {
     document.querySelector(`[data-c="${c}"]`).className = 'tab' + (c === activeCandidate ? ' active' : '');
     document.getElementById(`badge-${c}`).textContent  = pct(c) + '%';
   }
@@ -689,7 +689,7 @@ function showToast(msg) {
 // WEEKLY SUMMARY
 // ─────────────────────────────────────────────────────────────
 function generateSummary() {
-  const name  = activeCandidate === 'amelia' ? 'Amelia' : 'Matamoana';
+  const name  = activeCandidate === 'candidate_1' ? 'Candidate 1' : 'Candidate 2';
   const p     = pct(activeCandidate), n = state[activeCandidate].completed.size;
   const stats = competencyStats(activeCandidate), weak = weakest(activeCandidate), next5 = nextModules(activeCandidate, 5);
   const date  = new Date().toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric' });
